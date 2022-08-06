@@ -1,6 +1,4 @@
 .App {
-  background: RGBA(250, 250, 250, 1);
-
   h1, h2, h3, h4, h5 {
     padding: 0;
     margin: 0;
@@ -14,5 +12,9 @@
     width: 100vw;
     height: 3rem;
     line-height: 3rem;
+  }
+
+  .content {
+    margin-top: 3rem;
   }
 }

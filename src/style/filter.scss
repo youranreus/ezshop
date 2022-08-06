@@ -1,0 +1,23 @@
+.filter {
+  background: var(--semi-color-bg-1);
+  height: 2rem;
+  line-height: 2rem;
+  padding-inline: .5rem;
+  //border-bottom: 1px solid var(--semi-color-border);
+
+  .left {
+    .order {
+      background: none;
+      border: none;
+    }
+  }
+
+  .right {
+    text-align: right;
+
+    .advance {
+      font-size: 0.875rem;
+      color: var( --semi-color-primary);
+    }
+  }
+}

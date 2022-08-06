@@ -12,7 +12,7 @@ function App() {
         <div className="App">
             <Layout>
                 <Header className={"header"}><TopBar/></Header>
-                <Content>
+                <Content className={"content"}>
                     <Router>
                         <Routes>{renderRoutes(route)}</Routes>
                     </Router>

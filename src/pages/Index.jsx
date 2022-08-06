@@ -2,10 +2,12 @@
  * @author 季悠然
  * @date 2022-08-05
  */
+import Filter from "../components/filter";
+
 function Index() {
     return (
-        <div className="App">
-            <p>Index</p>
+        <div className="index">
+            <Filter/>
         </div>
     );
 }
