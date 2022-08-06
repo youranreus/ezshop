@@ -1,3 +1,18 @@
 .App {
   background: RGBA(250, 250, 250, 1);
+
+  h1, h2, h3, h4, h5 {
+    padding: 0;
+    margin: 0;
+  }
+
+  .header {
+    position: fixed;
+    top: 0;
+    background: var( --semi-color-bg-3);
+    border-bottom: 1px solid var( --semi-color-border);
+    width: 100vw;
+    height: 3rem;
+    line-height: 3rem;
+  }
 }

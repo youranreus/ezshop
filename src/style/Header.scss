@@ -1,0 +1,22 @@
+.top-bar {
+  margin: 0 .5rem;
+
+  h3 {
+    font-weight: 400;
+  }
+
+  .right {
+    text-align: right;
+
+    .search {
+      width: 60%;
+      transition: width .2s;
+      position: relative;
+      top: -2px;
+
+      &:active, &:hover, &:focus {
+        width: 90%;
+      }
+    }
+  }
+}
