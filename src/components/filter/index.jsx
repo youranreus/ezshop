@@ -4,11 +4,9 @@
  */
 import React, { useState } from 'react';
 import '../../style/filter.scss';
-import { Col, Row, Select, SideSheet, Button, Space, Input, TagInput, Banner, Typography } from '@douyinfe/semi-ui';
-import { IconSort } from '@douyinfe/semi-icons';
+import { Col, Row, Select, SideSheet, Button, Space, Input, TagInput, Banner } from '@douyinfe/semi-ui';
 
 export default function Filter() {
-    const { Text } = Typography;
     const [visible, setVisible] = useState(false);
     const change = () => {
         setVisible(!visible);
@@ -27,7 +25,7 @@ export default function Filter() {
         <div className={"filter"}>
             <Row>
                 <Col span={18} className={"left"}>
-                    <Select prefix={<IconSort/>} defaultValue={"default"} size='small' className={"order"}>
+                    <Select  defaultValue={"default"} size='small' className={"order"}>
                         <Select.Option value='default'>默认排序</Select.Option>
                         <Select.Option value='priceh'>价格从高到低</Select.Option>
                         <Select.Option value='pricel'>价格从低到高</Select.Option>
