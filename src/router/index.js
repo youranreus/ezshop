@@ -3,12 +3,18 @@
  * @date 2022-08-05
  */
 import Index from "../pages/Index";
+import Base from "../pages/base";
 
 const routes = [
     {
         path: "/",
-        element: <Index />,
-        children: [],
+        element: <Base/>,
+        children: [
+            {
+                index: true,
+                element: <Index/>,
+            }
+        ],
     },
 ];
 export default routes;
