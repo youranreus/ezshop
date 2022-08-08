@@ -4,6 +4,7 @@
  */
 import Index from "../pages/Index";
 import Base from "../pages/base";
+import Admin from "../pages/Admin";
 
 const routes = [
     {
@@ -16,5 +17,9 @@ const routes = [
             }
         ],
     },
+    {
+        path: "/admin",
+        element: <Admin/>
+    }
 ];
 export default routes;
