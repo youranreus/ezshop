@@ -5,6 +5,7 @@
 import Index from "../pages/Index";
 import Base from "../pages/base";
 import Admin from "../pages/Admin";
+import Login from "../pages/admin/Login";
 
 const routes = [
     {
@@ -19,7 +20,13 @@ const routes = [
     },
     {
         path: "/admin",
-        element: <Admin/>
+        element: <Admin/>,
+        children: [
+            {
+                path: "/admin/login",
+                element: <Login/>
+            }
+        ]
     }
 ];
 export default routes;
