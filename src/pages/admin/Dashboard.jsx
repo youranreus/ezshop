@@ -4,7 +4,7 @@
  */
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {IconPlus, IconDelete, IconMinus} from "@douyinfe/semi-icons";
+import {IconPlus, IconDelete, IconMinus, IconEdit} from "@douyinfe/semi-icons";
 import {
     TagGroup,
     Toast,
@@ -25,6 +25,7 @@ import {getDate} from "../../utils";
 export default function Dashboard() {
     const navi = useNavigate();
     const [addPanel, setAddPanel] = useState(false);
+    const [editPanel, setEditPanel] = useState(false);
     const {Title} = Typography;
     const [newItem, setNewItem] = useState({});
     const [itemList, updateItemList] = useState([]);
@@ -79,13 +80,24 @@ export default function Dashboard() {
             }
         },
         {
-            title: '',
-            dataIndex: 'operate',
+            title: '数量操作',
+            dataIndex: 'numOperate',
             render: (text, record, index) => {
                 return (
                     <ButtonGroup>
                         <Button type={"primary"} icon={<IconPlus />} onClick={() => handleUpdateNum(record, index)}/>
                         <Button icon={<IconMinus />} onClick={() => handleUpdateNum(record, index, -1)}/>
+                    </ButtonGroup>
+                );
+            }
+        },
+        {
+            title: '其他操作',
+            dataIndex: 'otherOperate',
+            render: (text, record, index) => {
+                return (
+                    <ButtonGroup>
+                        <Button icon={<IconEdit />} onClick={() => handleEditOpen(record, index)}/>
                         <Button type={"danger"} icon={<IconDelete />} onClick={() => handleDelete(record, index)}/>
                     </ButtonGroup>
                 );
@@ -190,9 +202,51 @@ export default function Dashboard() {
         }
     }
 
-    const footer = (
+    /**
+     * 礼品开启修改回调
+     * @param record
+     * @param index
+     */
+    const handleEditOpen = (record, index) => {
+        const obj = {...record}
+        obj.labels = obj.labels.slice(1, -1).split("#")
+        setNewItem(obj);
+        setEditPanel(true);
+    }
+
+    /**
+     * 礼品修改回调
+     */
+    const handleEdit = () => {
+        const obj = {}
+        const keys = ['id', 'title', 'description', 'kind', 'path_img', 'labels', 'num']
+        keys.forEach(key => { obj[key] = newItem[key] })
+        obj.labels = '#' + obj.labels.join('#') + '#'
+
+        UpdateGift(obj).then(res => {
+            if(res.data.code === 200) {
+                const arr = [].concat(itemList)
+                arr.forEach(e => {
+                    if (e.id === obj.id)
+                        keys.forEach(key => e[key] = obj[key])
+                })
+
+                updateItemList(arr)
+                Toast.success(`${obj.title} 修改成功`)
+            } else
+                Toast.success(res.data.msg)
+        })
+    }
+
+    const AddFooter = (
         <div style={{display: 'flex', justifyContent: 'flex-end'}}>
             <Button theme="solid" onClick={handleSubmit}>添加</Button>
+        </div>
+    );
+
+    const EditFooter = (
+        <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+            <Button theme="solid" onClick={handleEdit}>修改</Button>
         </div>
     );
 
@@ -223,13 +277,36 @@ export default function Dashboard() {
                 }
             </div>
 
-            <SideSheet title={"添加礼品"} keepDOM={true} footer={footer} visible={addPanel} onCancel={() => {
+            <SideSheet title={"添加礼品"} keepDOM={true} footer={AddFooter} visible={addPanel} onCancel={() => {
                 setAddPanel(false)
             }}>
                 <div className="add-panel">
                     <Form onChange={(v) => {
                         setNewItem(v.values)
                     }}>
+                        <Form.Input field={'title'} label={'标题'}/>
+                        <Row>
+                            <Col span={12}>
+                                <Form.Input field={'kind'} label={'分类'} style={{width: "90%"}}/>
+                            </Col>
+                            <Col span={12}>
+                                <Form.InputNumber field={'num'} label={'数量'} min={0}/>
+                            </Col>
+                        </Row>
+                        <Form.Input field={'path_img'} label={'图片url'}/>
+                        <Form.TagInput field={'labels'} label={'标签'}/>
+                        <Form.TextArea field={'description'} label={'描述'}/>
+                    </Form>
+                </div>
+            </SideSheet>
+
+            <SideSheet title={"修改礼品"} footer={EditFooter} visible={editPanel} onCancel={() => {
+                setEditPanel(false)
+            }}>
+                <div className="edit-panel">
+                    <Form onChange={(v) => {
+                        setNewItem(v.values)
+                    }} initValues={newItem}>
                         <Form.Input field={'title'} label={'标题'}/>
                         <Row>
                             <Col span={12}>
