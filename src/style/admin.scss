@@ -1,6 +1,7 @@
 .admin {
-
   .header {
+
+
     .return {
       font-weight: 600;
       text-decoration: none;
@@ -32,6 +33,18 @@
 
       .input {
         margin-bottom: 1rem;
+      }
+    }
+  }
+
+  .dashboard {
+    margin: 5rem auto;
+    width: calc(100vw - 10rem);
+    max-width: 1440px;
+
+    .head {
+      .right {
+        text-align: right;
       }
     }
   }
