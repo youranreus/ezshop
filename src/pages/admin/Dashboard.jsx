@@ -21,6 +21,7 @@ import {
 } from "@douyinfe/semi-ui";
 import {AddGift, DelGift, QueryThingList, UpdateGift} from "../../api/admin";
 import {getDate} from "../../utils";
+import NumEditor from "./NumEditor";
 
 export default function Dashboard() {
     const navi = useNavigate();
@@ -89,10 +90,7 @@ export default function Dashboard() {
             dataIndex: 'numOperate',
             render: (text, record, index) => {
                 return (
-                    <ButtonGroup>
-                        <Button type={"primary"} icon={<IconPlus />} onClick={() => handleUpdateNum(record, index)}/>
-                        <Button icon={<IconMinus />} onClick={() => handleUpdateNum(record, index, -1)}/>
-                    </ButtonGroup>
+                    <NumEditor record={record} index={index} handler={handleUpdateNum}/>
                 );
             }
         },
