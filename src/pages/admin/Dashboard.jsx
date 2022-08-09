@@ -75,17 +75,6 @@ export default function Dashboard() {
             }
         },
         {
-            title: "发布时间",
-            dataIndex: 'created_at',
-            render: (text, record, index) => {
-                return (
-                    <div>
-                        {getDate(text)}
-                    </div>
-                );
-            }
-        },
-        {
             title: '数量操作',
             dataIndex: 'numOperate',
             render: (text, record, index) => {
