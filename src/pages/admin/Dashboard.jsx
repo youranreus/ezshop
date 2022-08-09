@@ -29,6 +29,7 @@ export default function Dashboard() {
     const {Title} = Typography;
     const [newItem, setNewItem] = useState({});
     const [itemList, updateItemList] = useState([]);
+    const [selectedList, setSelectedList] = useState([]);
 
     /**
      * 表格列定义
@@ -54,7 +55,11 @@ export default function Dashboard() {
         {
             title: '分类',
             dataIndex: 'kind',
-
+        },
+        {
+            title: '状态',
+            dataIndex: 'is_active',
+            render: (text, record) => <div>{record.is_active ? "已上架" : "已下架"}</div>
         },
         {
             title: '标签',
@@ -238,6 +243,50 @@ export default function Dashboard() {
         })
     }
 
+    /**
+     * 行操作handlers
+     */
+    const rowSelection = {
+        getCheckboxProps: record => ({
+            name: record.title,
+        }),
+        onSelect: (record, selected) => {
+            setSelectedList([record].concat(selectedList))
+        },
+        onSelectAll: (selected, selectedRows) => {
+            setSelectedList(selectedRows)
+        }
+    };
+
+    /**
+     * 批量上下架
+     * @param status
+     */
+    const handleActive = (status) => {
+        const arr = []
+        selectedList.forEach(e => {
+            arr.push(UpdateGift({
+                id: e.id,
+                is_active: status
+            }))
+        })
+
+        Promise.all(arr).then(res => {
+            for(const e of res)
+                if(e.data.code !== 200)
+                    throw new Error(e.data.msg)
+
+            const list = [].concat(itemList)
+            selectedList.forEach(e => {
+                list[list.findIndex(item => item.id === e.id)].is_active = status
+            })
+            updateItemList(list)
+            Toast.success("操作成功")
+        }).catch(e => {
+            Toast.error(e.message)
+        })
+    }
+
     const AddFooter = (
         <div style={{display: 'flex', justifyContent: 'flex-end'}}>
             <Button theme="solid" onClick={handleSubmit}>添加</Button>
@@ -263,8 +312,8 @@ export default function Dashboard() {
                                 setAddPanel(true)
                             }}>添加礼品</Button>
                             <ButtonGroup type={"secondary"}>
-                                <Button>上架礼品</Button>
-                                <Button>下架礼品</Button>
+                                <Button onClick={() => handleActive(true)}>批量上架礼品</Button>
+                                <Button onClick={() => handleActive(false)}>批量下架礼品</Button>
                             </ButtonGroup>
                         </Space>
                     </Col>
@@ -273,7 +322,7 @@ export default function Dashboard() {
 
             <div className="thing-list">
                 {
-                    itemList && <Table columns={columns} dataSource={itemList}/>
+                    itemList && <Table columns={columns} dataSource={itemList} rowSelection={rowSelection} rowKey={'id'}/>
                 }
             </div>
 
