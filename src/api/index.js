@@ -16,8 +16,8 @@ const APIWithAuth = axios.create({
 });
 
 APIWithAuth.interceptors.request.use((req) => {
-    if (localStorage.getItem("token"))
-        req.headers.Authorization = "Bearer " + localStorage.getItem("token");
+    if (localStorage.getItem("access_token"))
+        req.headers.Authorization = "Bearer " + localStorage.getItem("access_token");
     return req;
 });
 

@@ -6,19 +6,13 @@ import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {IconPlus} from "@douyinfe/semi-icons";
 import {Toast, Typography, Button, ButtonGroup, Col, Row, Space, SideSheet, Form} from "@douyinfe/semi-ui";
+import {AddGift} from "../../api/admin";
 
 export default function Dashboard() {
     const navi = useNavigate();
     const [addPanel, setAddPanel] = useState(false);
     const {Title} = Typography;
-    const [newItem, setNewItem] = useState({
-        title: '',
-        description: '',
-        kind: '',
-        path_img: '',
-        labels: '',
-        num: 0
-    });
+    const [newItem, setNewItem] = useState({});
 
     useEffect(() => {
         if (!localStorage.getItem('access_token')) {
@@ -35,8 +29,29 @@ export default function Dashboard() {
         }
     }, [])
 
+    const paramCheck = () => {
+        const keys = ['title', 'description', 'kind', 'path_img', 'labels', 'num']
+        if (!keys.every((key) => Object.hasOwn(newItem, key)))
+            return '不能留空噢';
+        return false
+    }
+
     const handleSubmit = () => {
-        console.log(newItem)
+        if (!paramCheck()) {
+            newItem.labels = '#' + newItem.labels.join('#') + '#';
+            AddGift(newItem).then(res => {
+                console.log(res)
+                Toast.success({
+                    content: `${newItem.title} 添加成功`,
+                    duration: 2
+                })
+            })
+        } else {
+            Toast.error({
+                content: paramCheck(),
+                duration: 2
+            })
+        }
     }
 
     const footer = (

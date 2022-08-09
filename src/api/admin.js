@@ -4,5 +4,8 @@
  */
 
 import API from "./index";
+import {APIWithAuth} from "./index";
 
 export const login = (username, password) => API.post('/token', {username, password});
+
+export const AddGift = (data) => APIWithAuth.post('/thing', data);
