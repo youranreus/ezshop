@@ -1,4 +1,14 @@
 .admin {
+  .header {
+
+
+    .return {
+      font-weight: 600;
+      text-decoration: none;
+      color: var(--semi-color-primary);
+      font-size: 0.875rem;
+    }
+  }
 
   .footer {
     p {
@@ -6,6 +16,40 @@
       opacity: .6;
       font-weight: 600;
       font-size: 0.875rem;
+    }
+  }
+
+  .login-wrapper {
+    width: 100vw;
+    margin: 10rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .login-box {
+      h4 {
+        margin-bottom: .5rem;
+      }
+
+      .input {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+
+  .dashboard {
+    margin: 5rem auto;
+    width: calc(100vw - 10rem);
+    max-width: 1440px;
+
+    .head {
+      .right {
+        text-align: right;
+      }
+    }
+
+    .thing-list {
+      margin-top: 20px;
     }
   }
 }

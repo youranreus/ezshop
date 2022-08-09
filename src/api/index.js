@@ -5,7 +5,7 @@
 
 import axios from "axios";
 
-const baseURL = 'http://10.108.2.168:50070';
+const baseURL = 'http://10.108.2.168:50070/api';
 
 const API = axios.create({
     baseURL
@@ -16,8 +16,8 @@ const APIWithAuth = axios.create({
 });
 
 APIWithAuth.interceptors.request.use((req) => {
-    if (localStorage.getItem("token"))
-        req.headers.Authorization = "Bearer " + localStorage.getItem("token");
+    if (localStorage.getItem("access_token"))
+        req.headers.Authorization = "Bearer " + localStorage.getItem("access_token");
     return req;
 });
 
