@@ -19,8 +19,8 @@ import {
     Table,
     Avatar
 } from "@douyinfe/semi-ui";
-import {AddGift, DelGift, QueryThingList} from "../../api/admin";
-import {getDate, getQueryJson} from "../../utils";
+import {AddGift, DelGift, QueryThingList, UpdateGift} from "../../api/admin";
+import {getDate} from "../../utils";
 
 export default function Dashboard() {
     const navi = useNavigate();
@@ -84,8 +84,8 @@ export default function Dashboard() {
             render: (text, record, index) => {
                 return (
                     <ButtonGroup>
-                        <Button type={"primary"} icon={<IconPlus />}/>
-                        <Button icon={<IconMinus />}/>
+                        <Button type={"primary"} icon={<IconPlus />} onClick={() => handleUpdateNum(record, index)}/>
+                        <Button icon={<IconMinus />} onClick={() => handleUpdateNum(record, index, -1)}/>
                         <Button type={"danger"} icon={<IconDelete />} onClick={() => handleDelete(record, index)}/>
                     </ButtonGroup>
                 );
@@ -98,10 +98,7 @@ export default function Dashboard() {
      */
     useEffect(() => {
         if (!localStorage.getItem('access_token')) {
-            Toast.info({
-                content: '请先登录',
-                duration: 2
-            })
+            Toast.info('请先登录')
             navi('/admin/login');
         } else {
             Toast.info({
@@ -118,10 +115,7 @@ export default function Dashboard() {
     useEffect(() => {
         QueryThingList().then(res => {
             if(res.data.code !== 200) {
-                Toast.info({
-                    content: "礼品列表获取出错",
-                    duration: 2
-                })
+                Toast.info(res.data.msg)
             } else {
                 updateItemList(res.data.data)
             }
@@ -146,11 +140,7 @@ export default function Dashboard() {
         if (!paramCheck()) {
             newItem.labels = '#' + newItem.labels.join('#') + '#';
             AddGift(newItem).then(res => {
-                console.log(res)
-                Toast.success({
-                    content: `${newItem.title} 添加成功`,
-                    duration: 2
-                })
+                Toast.success(`${newItem.title} 添加成功`)
             })
         } else {
             Toast.error({
@@ -160,25 +150,44 @@ export default function Dashboard() {
         }
     }
 
+    /**
+     * 处理礼品删除回调
+     * @param record
+     * @param index
+     */
     const handleDelete = (record, index) => {
         DelGift(record.id).then(res => {
             console.log(res.data)
             if (res.data.code === 200) {
                 updateItemList(itemList.filter((_, i) => i !== index))
-                Toast.success({
-                    content: "删除成功",
-                    duration: 2
-                })
+                Toast.success("删除成功")
             }
             else
-            {
-                Toast.error({
-                    content: res.data.msg,
-                    duration: 2
-                })
-            }
+                Toast.error(res.data.msg)
         })
 
+    }
+
+    /**
+     * 数量调整回调
+     * @param record
+     * @param index
+     * @param num
+     */
+    const handleUpdateNum = (record, index, num = 1) => {
+        if(record.num + num < 0)
+            Toast.error("数量不能小于0")
+        else {
+            UpdateGift({id: record.id, num: record.num + num}).then(res => {
+                if(res.data.code === 200) {
+                    const arr = [].concat(itemList);
+                    arr[index].num = record.num + num;
+                    updateItemList(arr)
+                }
+                else
+                    Toast.error(res.data.msg)
+            })
+        }
     }
 
     const footer = (
