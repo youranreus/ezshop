@@ -4,6 +4,7 @@
  */
 import { Layout, Col, Row, Typography } from '@douyinfe/semi-ui';
 import {Outlet} from "react-router-dom";
+import {Link} from "react-router-dom";
 import '../style/admin.scss';
 
 export default function Admin() {
@@ -19,7 +20,7 @@ export default function Admin() {
                             <Row>
                                 <Col span={12}>礼品Go 后台管理</Col>
                                 <Col span={12} style={{textAlign: "right"}}>
-                                    <Text link={{href: "/"}}>返回首页</Text>
+                                    <Link to={'/'} className={"return"}>返回前台</Link>
                                 </Col>
                             </Row>
                         </div>

@@ -3,11 +3,49 @@
  * @date 2022-08-08
  */
 import {useState} from "react";
-import {Card, Input,  Button} from "@douyinfe/semi-ui";
+import {useNavigate} from "react-router-dom";
+import {Card, Input,  Button, Toast} from "@douyinfe/semi-ui";
+import {login} from "../../api/admin";
 
 export default function Login () {
     const [password, setPwd] = useState('');
     const [username, setUsername] = useState('');
+    const [loading, setLoading] = useState(false);
+    const navi = useNavigate();
+
+    const submit = () => {
+        if(password === '' || username === '') {
+            Toast.warning({
+                content: "用户名或密码不能为空",
+                duration: 2
+            })
+        }
+        else
+        {
+            setLoading(true);
+            login(username, password).then(res => {
+                console.log(res)
+                if (res.data.code === 200) {
+                    Toast.success({
+                        content: "登陆成功",
+                        duration: 2
+                    })
+                    localStorage.setItem('access_token', res.data.access_token);
+                    localStorage.setItem('refresh_token', res.data.refresh_token);
+                    navi('/admin/dashboard');
+                }
+                else
+                {
+                    Toast.error({
+                        content: res.data.msg,
+                        duration: 2
+                    })
+                }
+                setLoading(false);
+            })
+        }
+
+    }
 
     return (
         <div className={"login-wrapper"}>
@@ -22,7 +60,7 @@ export default function Login () {
                     <Input className={"input"} value={username} onChange={(v) => {setUsername(v)}}></Input>
                     <h4>密码</h4>
                     <Input className={"input"} value={password} onChange={(v) => {setPwd(v)}} type={"password"}></Input>
-                    <Button block theme={'solid'} type={"primary"}>登录</Button>
+                    <Button disabled={loading} block theme={'solid'} type={"primary"} onClick={submit}>登录</Button>
                 </div>
             </Card>
         </div>
