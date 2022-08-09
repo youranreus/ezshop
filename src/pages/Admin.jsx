@@ -2,14 +2,13 @@
  * @author 季悠然
  * @date 2022-08-08
  */
-import { Layout, Col, Row, Typography } from '@douyinfe/semi-ui';
+import { Layout, Col, Row } from '@douyinfe/semi-ui';
 import {Outlet} from "react-router-dom";
 import {Link} from "react-router-dom";
 import '../style/admin.scss';
 
 export default function Admin() {
     const {Header, Content, Footer} = Layout;
-    const {Text} = Typography;
 
     return (
         <div className={"admin"}>

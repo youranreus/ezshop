@@ -28,7 +28,7 @@ const routes = [
                 element: <Login/>
             },
             {
-                path: "/admin/dashboard",
+                index: true,
                 element: <Dashboard/>
             }
         ]
