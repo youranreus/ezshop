@@ -14,6 +14,12 @@ export default function LoadMoreList() {
     // const [noMore, setNoMore] = useState(false);
     // const [visible, setVisible] = useState(false);
 
+    let [loading, setLoading] = useState(false);
+    let [dataSource, setDataSource] = useState([]);
+    let [list, setList] = useState([]);
+    let [noMore, setNoMore] = useState(false);
+    let [visible, setVisible] = useState(false);
+
     const count = 3;
     const data = [];
     for (let i = 0; i < 40; i++) {
@@ -44,12 +50,6 @@ export default function LoadMoreList() {
             setNoMore(!dataSource.length);
         });
     };
-
-    let [loading, setLoading] = useState(false);
-    let [dataSource, setDataSource] = useState([]);
-    let [list, setList] = useState([]);
-    let [noMore, setNoMore] = useState(false);
-    let [visible, setVisible] = useState(false);
 
     useEffect(() => {
         fetchData();

@@ -1,18 +1,16 @@
-/**
- * @author 背锅切图仔
- * @date 2022-08-10
- */
 import React, { useEffect, useState } from 'react';
 import { List, Skeleton, Button, Avatar } from '@douyinfe/semi-ui';
-import { SideSheet, Space, Input, TagInput, Banner } from '@douyinfe/semi-ui';
+// import { SideSheet, Space, Input, TagInput, Banner } from '@douyinfe/semi-ui';
 import '../../style/itemlist.scss'
 
 export default function LoadMoreList() {
-    // const [loading, setLoading] = useState(false);
-    // const [dataSource, setDataSource] = useState([]);
-    // const [list, setList] = useState([]);
-    // const [noMore, setNoMore] = useState(false);
-    // const [visible, setVisible] = useState(false);
+    const [state, setState] = useState({
+        loading: false,
+        dataSource: [],
+        list: [],
+        noMore: false,
+        visible: false,
+    })
 
     const count = 3;
     const data = [];
@@ -26,10 +24,19 @@ export default function LoadMoreList() {
     let data1 = data;
     let count1 = 0;
 
+    // function change() {
+    //     setState({
+    //         visible: !state.visible
+    //     })
+    //     console.log('@')
+    // };
+
     function fetchData() {
         let placeholders = [0, 1, 2].map(key => ({ loading: true }));
-        setLoading(true);
-        setList([...dataSource, ...placeholders]);
+        setState({
+            loading: true,
+            list: [...state.dataSource, ...placeholders],
+        });
 
         return new Promise((res, rej) => {
             setTimeout(() => {
@@ -37,19 +44,23 @@ export default function LoadMoreList() {
                 res(dataSource);
             }, 1000);
         }).then(dataSource => {
-            let newData = [...dataSource, ...dataSource];
-            setLoading(false);
-            setDataSource(newData);
-            setList(newData);
-            setNoMore(!dataSource.length);
+            let newData = [...state.dataSource, ...dataSource];
+            setState({
+                loading: false,
+                dataSource: newData,
+                list: newData,
+                noMore: !dataSource.length,
+            });
         });
     };
 
-    let [loading, setLoading] = useState(false);
-    let [dataSource, setDataSource] = useState([]);
-    let [list, setList] = useState([]);
-    let [noMore, setNoMore] = useState(false);
-    let [visible, setVisible] = useState(false);
+    // setState({
+    //     loading: false,
+    //     dataSource: [],
+    //     list: [],
+    //     noMore: false,
+    //     visible: false,
+    // });
 
     useEffect(() => {
         fetchData();
@@ -60,8 +71,17 @@ export default function LoadMoreList() {
         fetchData();
     }
 
+    // function advancedFooter() {
+    //     return (<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+    //         <Space>
+    //             <Button theme='borderless' onClick={change}>取消</Button>
+    //             <Button theme='solid'>确认</Button>
+    //         </Space>
+    //     </div>)
+    // }
+
     const loadMore =
-        !loading && !noMore ? (
+        !state.loading && !state.noMore ? (
             <div
                 style={{
                     textAlign: 'center',
@@ -84,29 +104,15 @@ export default function LoadMoreList() {
         </div>
     );
 
-    function advancedFooter() {
-        return (<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Space>
-                <Button theme='borderless' onClick={change}>取消</Button>
-                <Button theme='solid'>确认</Button>
-            </Space>
-        </div>)
-    }
-
-    function change() {
-        setVisible(!visible);
-        console.log('@')
-    };
-
     return (
         <div>
             <List
-                loading={loading}
+                loading={state.loading}
                 loadMore={loadMore}
-                dataSource={list}
+                dataSource={state.list}
                 renderItem={item => (
                     <Skeleton placeholder={placeholder} loading={item.loading}>
-                        <List.Item onClick={change}
+                        <List.Item /* onClick={change} */
                             header={<Avatar src='https://ts1.cn.mm.bing.net/th/id/R-C.6b21c09cb3426651884be95ea5ed484a?rik=jVHUGxj8GKvvzQ&riu=http%3a%2f%2fb.zol-img.com.cn%2fdesk%2fbizhi%2fstart%2f4%2f1392980276409.jpg&ehk=aKKsCzg3qxRsMXpgwkl7Q9fY7ZmDS2XM4jJCmMQGSj0%3d&risl=&pid=ImgRaw&r=0'></Avatar>}
                             main={
                                 <div>
@@ -123,7 +129,7 @@ export default function LoadMoreList() {
                 )}
             />
 
-            <SideSheet footer={advancedFooter()} title="高级筛选" visible={visible} onCancel={change} placement={"bottom"}>
+            {/* <SideSheet footer={advancedFooter()} title="高级筛选" visible={state.visible} onCancel={change} placement={"bottom"}>
                 <h4>分类</h4>
                 <Input defaultValue='hi'></Input>
                 <h4>标签</h4>
@@ -132,7 +138,7 @@ export default function LoadMoreList() {
                 <Banner fullMode={false} type="info" icon={null} closeIcon={null}
                     description={<div>分类只可输入单一分类，用于确认大类别<br />标签可以输入多个，敲击回车键后，输入内容将记录为一个标签</div>}
                 />
-            </SideSheet>
+            </SideSheet> */}
         </div>
     );
 }
