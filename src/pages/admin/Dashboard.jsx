@@ -4,7 +4,7 @@
  */
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {IconPlus, IconDelete, IconMinus, IconEdit} from "@douyinfe/semi-icons";
+import {IconPlus, IconDelete, IconEdit} from "@douyinfe/semi-icons";
 import {
     TagGroup,
     Toast,
@@ -20,7 +20,6 @@ import {
     Avatar
 } from "@douyinfe/semi-ui";
 import {AddGift, DelGift, QueryThingList, UpdateGift} from "../../api/admin";
-import {getDate} from "../../utils";
 import NumEditor from "./NumEditor";
 
 export default function Dashboard() {
@@ -144,7 +143,12 @@ export default function Dashboard() {
         if (!paramCheck()) {
             newItem.labels = '#' + newItem.labels.join('#') + '#';
             AddGift(newItem).then(res => {
-                Toast.success(`${newItem.title} 添加成功`)
+                if(res.data.code === 200) {
+                    updateItemList([res.data.data].concat(itemList));
+                    Toast.success(`${newItem.title} 添加成功`)
+                } else {
+                    Toast.error(res.data.msg)
+                }
             })
         } else {
             Toast.error({
