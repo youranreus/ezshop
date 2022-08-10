@@ -215,7 +215,7 @@ export default function Dashboard() {
      */
     const handleEdit = () => {
         const obj = {}
-        const keys = ['id', 'title', 'description', 'kind', 'path_img', 'labels', 'num']
+        const keys = ['id', 'title', 'description', 'kind', 'path_img', 'labels', 'num', 'ori_price']
         keys.forEach(key => { obj[key] = newItem[key] })
         obj.labels = '#' + obj.labels.join('#') + '#'
 
@@ -327,12 +327,13 @@ export default function Dashboard() {
                         <Form.Input field={'title'} label={'标题'}/>
                         <Row>
                             <Col span={12}>
-                                <Form.Input field={'kind'} label={'分类'} style={{width: "90%"}}/>
+                                <Form.InputNumber field={'ori_price'} label={'价格'} min={0} style={{width: "90%"}}/>
                             </Col>
                             <Col span={12}>
                                 <Form.InputNumber field={'num'} label={'数量'} min={0}/>
                             </Col>
                         </Row>
+                        <Form.Input field={'kind'} label={'分类'}/>
                         <Form.Input field={'path_img'} label={'图片url'}/>
                         <Form.TagInput field={'labels'} label={'标签'}/>
                         <Form.TextArea field={'description'} label={'描述'}/>
@@ -350,12 +351,13 @@ export default function Dashboard() {
                         <Form.Input field={'title'} label={'标题'}/>
                         <Row>
                             <Col span={12}>
-                                <Form.Input field={'kind'} label={'分类'} style={{width: "90%"}}/>
+                                <Form.InputNumber field={'ori_price'} label={'价格'} min={0} style={{width: "90%"}}/>
                             </Col>
                             <Col span={12}>
                                 <Form.InputNumber field={'num'} label={'数量'} min={0}/>
                             </Col>
                         </Row>
+                        <Form.Input field={'kind'} label={'分类'}/>
                         <Form.Input field={'path_img'} label={'图片url'}/>
                         <Form.TagInput field={'labels'} label={'标签'}/>
                         <Form.TextArea field={'description'} label={'描述'}/>
