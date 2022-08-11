@@ -1,3 +1,8 @@
+/**
+ * @author 背锅切图仔
+ * @date 2022-08-10
+ */
+
 import API from './index'
 import { getQueryJson } from "../utils";
 

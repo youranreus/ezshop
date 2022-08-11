@@ -2,29 +2,41 @@
  * @author 背锅切图仔
  * @date 2022-08-10
  */
+
 import React, { useEffect, useState } from 'react';
 import { List, Skeleton, Button, Avatar } from '@douyinfe/semi-ui';
-import { SideSheet, Space, Input, TagInput, Banner } from '@douyinfe/semi-ui';
+import { SideSheet, Space, Banner } from '@douyinfe/semi-ui';
+import PubSub from 'pubsub-js'
+import { QueryThingList } from '../../api/gift'
 import '../../style/itemlist.scss'
 
-export default function LoadMoreList() {
-    // const [loading, setLoading] = useState(false);
-    // const [dataSource, setDataSource] = useState([]);
-    // const [list, setList] = useState([]);
-    // const [noMore, setNoMore] = useState(false);
-    // const [visible, setVisible] = useState(false);
+let count = 0;
+const once = 3;
+let data = [];
 
-    const count = 3;
-    const data = [];
-    for (let i = 0; i < 40; i++) {
-        data.push({
-            color: 'grey',
-            title: `Semi Design Title ${i}`,
-            loading: false,
-        });
-    }
-    let data1 = data;
-    let count1 = 0;
+let setObj = {
+    "filter": {
+        "kind": ["like", ""],
+        // "labels": ["like", ["玩偶", "真实"]]
+        "labels": ["like", ""]
+    },
+    "order": {
+        "created_at": "desc"
+    },
+    "page": 1,
+    "per_page": 10
+}
+
+export default function LoadMoreList() {
+    const [loading, setLoading] = useState(false);
+    const [dataSource, setDataSource] = useState([]);
+    const [list, setList] = useState([]);
+    const [noMore, setNoMore] = useState(false);
+    const [visible, setVisible] = useState(false);
+    // const [kind, setKind] = useState("");
+    const [detailData, setDetailData] = useState({})
+
+    // console.log('labels: ', labels)
 
     function fetchData() {
         let placeholders = [0, 1, 2].map(key => ({ loading: true }));
@@ -33,30 +45,119 @@ export default function LoadMoreList() {
 
         return new Promise((res, rej) => {
             setTimeout(() => {
-                let dataSource = data1.slice(count1 * count, count1 * count + count);
-                res(dataSource);
+                let newDataSource = data.slice(count * once, count * once + once);
+                res(newDataSource);
             }, 1000);
-        }).then(dataSource => {
-            let newData = [...dataSource, ...dataSource];
+        }).then(newDataSource => {
+            let newData = [...dataSource, ...newDataSource];
             setLoading(false);
             setDataSource(newData);
             setList(newData);
-            setNoMore(!dataSource.length);
+            setNoMore(!newDataSource.length);
         });
     };
 
-    let [loading, setLoading] = useState(false);
-    let [dataSource, setDataSource] = useState([]);
-    let [list, setList] = useState([]);
-    let [noMore, setNoMore] = useState(false);
-    let [visible, setVisible] = useState(false);
-
     useEffect(() => {
+        QueryThingList(setObj).then(res => {
+            data = res.data.data.filter((dataObj) => {
+                return dataObj["is_active"] === true
+            })
+            console.log('data: ', data)
+            for (let i = 0; i < data.length; i++) {
+                data[i]['loading'] = false
+            }
+        })
         fetchData();
+
+        // 排序功能
+        const order_token = PubSub.subscribe('order', (_, order_get) => {
+            if (order_get === "priceh") {
+                setObj["order"] = { "created_at": "desc" }
+            }
+            else if (order_get === "pricel") {
+                setObj["order"] = { "created_at": "asc" }
+            }
+            else if (order_get === "default") {
+                if (setObj["order"]) {
+                    setObj["order"] = undefined
+                }
+            }
+            console.log(setObj)
+            QueryThingList(setObj).then(res => {
+                data = res.data.data.filter((dataObj) => {
+                    return dataObj["is_active"] === true
+                })
+                console.log('data: ', data)
+                for (let i = 0; i < data.length; i++) {
+                    data[i]['loading'] = false
+                }
+            })
+            setList([]);
+            fetchData()
+        })
+
+        // 检索功能
+        const search_token = PubSub.subscribe('search', (_, search_get) => {
+            console.log(search_get)
+            QueryThingList(setObj).then(res => {
+                data = res.data.data.filter((dataObj) => {
+                    return dataObj["title"].includes(search_get) && dataObj["is_active"] === true
+                })
+                console.log('data: ', data)
+                for (let i = 0; i < data.length; i++) {
+                    data[i]['loading'] = false
+                }
+            })
+            setList([]);
+            fetchData()
+        })
+
+        // 高级筛选-筛选分类功能
+        const kind_token = PubSub.subscribe('kind', (_, kind_get) => {
+            // setObj["filter"]["kind"][0] = kind_get[0]
+            // console.log('setObj: ', setObj)
+            // QueryThingList(setObj).then(res => {
+            //     console.log(res.data)
+            //     console.log(res.data.data)
+            //     data = res.data.data.filter((dataObj) => {
+            //         return dataObj["is_active"] === true
+            //     })
+            //     console.log('data: ', data)
+            //     for (let i = 0; i < data.length; i++) {
+            //         data[i]['loading'] = false
+            //     }
+            // })
+            // setList([]);
+            // fetchData()
+        })
+
+        // 高级筛选-筛选标签功能
+        const labels_token = PubSub.subscribe('labels', (_, labels_get) => {
+            if (labels_get.length === 0) { setObj["filter"]["labels"][1] = "" }
+            else { setObj["filter"]["labels"][1] = labels_get[0] }
+            QueryThingList(setObj).then(res => {
+                data = res.data.data.filter((dataObj) => {
+                    return dataObj["is_active"] === true
+                })
+                console.log('data: ', data)
+                for (let i = 0; i < data.length; i++) {
+                    data[i]['loading'] = false
+                }
+            })
+            setList([]);
+            fetchData()
+        })
+
+        return () => { // 在组件卸载前执行
+            PubSub.unsubcribe(order_token);
+            PubSub.unsubcribe(search_token);
+            PubSub.unsubcribe(kind_token);
+            PubSub.unsubcribe(labels_token);
+        }
     }, [])
 
     function onLoadMore() {
-        count1++;
+        count++;
         fetchData();
     }
 
@@ -87,15 +188,16 @@ export default function LoadMoreList() {
     function advancedFooter() {
         return (<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Space>
-                <Button theme='borderless' onClick={change}>取消</Button>
-                <Button theme='solid'>确认</Button>
+                <Button onClick={change}>退出</Button>
+                <Button theme='borderless' >点赞</Button>
+                <Button theme='borderless' >收藏</Button>
+                <Button theme='solid' onClick={change}>购买</Button>
             </Space>
         </div>)
     }
 
     function change() {
         setVisible(!visible);
-        console.log('@')
     };
 
     return (
@@ -106,16 +208,23 @@ export default function LoadMoreList() {
                 dataSource={list}
                 renderItem={item => (
                     <Skeleton placeholder={placeholder} loading={item.loading}>
-                        <List.Item onClick={change}
-                            header={<Avatar src='https://ts1.cn.mm.bing.net/th/id/R-C.6b21c09cb3426651884be95ea5ed484a?rik=jVHUGxj8GKvvzQ&riu=http%3a%2f%2fb.zol-img.com.cn%2fdesk%2fbizhi%2fstart%2f4%2f1392980276409.jpg&ehk=aKKsCzg3qxRsMXpgwkl7Q9fY7ZmDS2XM4jJCmMQGSj0%3d&risl=&pid=ImgRaw&r=0'></Avatar>}
+                        <List.Item
+                            onClick={() => {
+                                change()
+                                console.log(item)
+                                setDetailData(item)
+                            }}
+                            header={<Avatar src={item.path_img}></Avatar>}
                             main={
                                 <div>
-                                    <span>{item.title}</span>
-                                    <p>
-                                        Semi Design
-                                        设计系统包含设计语言以及一整套可复用的前端组件，帮助设计师与开发者更容易地打造高质量的、用户体验一致的、符合设计规范的
-                                        Web 应用。
-                                    </p>
+                                    <div className="gift-title">{item.title}</div>
+                                    {
+                                        item.ori_price > 0 ?
+                                            <div className="gift-price"><span className="gift-price-number">{item.ori_price}</span><span className="gift-price-word">元</span></div>
+                                            :
+                                            <div className="gift-price">免费</div>
+                                    }
+                                    <p>{item.description}</p>
                                 </div>
                             }
                         />
@@ -123,14 +232,16 @@ export default function LoadMoreList() {
                 )}
             />
 
-            <SideSheet footer={advancedFooter()} title="高级筛选" visible={visible} onCancel={change} placement={"bottom"}>
-                <h4>分类</h4>
-                <Input defaultValue='hi'></Input>
-                <h4>标签</h4>
-                <TagInput></TagInput>
-                <br /><br />
+            <SideSheet footer={advancedFooter()} title="礼品详情" visible={visible} onCancel={change} placement={"bottom"}>
+                <img style={{ width: '100%' }} src={detailData.path_img} alt="" />
+                {/* <h4>创建时间：{detailData.created_at}</h4> */}
+                {/* <h4>更新时间：{detailData.updated_at}</h4> */}
+                <h4>分类：{detailData.title}</h4>
+                <h4>标签：{detailData.labels}</h4>
+                <h4 style={{ color: 'orangered' }}>价格：{detailData.ori_price}</h4>
+                <h4>剩余数量：{detailData.num}</h4>
                 <Banner fullMode={false} type="info" icon={null} closeIcon={null}
-                    description={<div>分类只可输入单一分类，用于确认大类别<br />标签可以输入多个，敲击回车键后，输入内容将记录为一个标签</div>}
+                    description={<div>描述：{detailData.description}</div>}
                 />
             </SideSheet>
         </div>
