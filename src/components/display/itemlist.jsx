@@ -3,9 +3,8 @@
  * @date 2022-08-10
  */
 
-import React, { useEffect, useState } from 'react';
-import { List, Skeleton, Button, Avatar } from '@douyinfe/semi-ui';
-import { SideSheet, Space, Banner } from '@douyinfe/semi-ui';
+import React, { useEffect, useState, useReducer } from 'react';
+import { List, Skeleton, Button, Avatar, SideSheet, Space, Banner, TagGroup } from '@douyinfe/semi-ui';
 import PubSub from 'pubsub-js'
 import { QueryThingList } from '../../api/gift'
 import '../../style/itemlist.scss'
@@ -30,11 +29,13 @@ let setObj = {
 export default function LoadMoreList() {
     const [loading, setLoading] = useState(false);
     const [dataSource, setDataSource] = useState([]);
-    const [list, setList] = useState([]);
+    let [list, setList] = useState([]);
     const [noMore, setNoMore] = useState(false);
     const [visible, setVisible] = useState(false);
     // const [kind, setKind] = useState("");
     const [detailData, setDetailData] = useState({})
+    const [tagList, setTagList] = useState([])
+    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
     // console.log('labels: ', labels)
 
@@ -71,6 +72,7 @@ export default function LoadMoreList() {
 
         // 排序功能
         const order_token = PubSub.subscribe('order', (_, order_get) => {
+            count = 0;
             if (order_get === "priceh") {
                 setObj["order"] = { "created_at": "desc" }
             }
@@ -92,12 +94,12 @@ export default function LoadMoreList() {
                     data[i]['loading'] = false
                 }
             })
-            setList([]);
-            fetchData()
+            fetchData();
         })
 
         // 检索功能
         const search_token = PubSub.subscribe('search', (_, search_get) => {
+            count = 0;
             console.log(search_get)
             QueryThingList(setObj).then(res => {
                 data = res.data.data.filter((dataObj) => {
@@ -108,31 +110,32 @@ export default function LoadMoreList() {
                     data[i]['loading'] = false
                 }
             })
-            setList([]);
             fetchData()
         })
 
         // 高级筛选-筛选分类功能
         const kind_token = PubSub.subscribe('kind', (_, kind_get) => {
-            // setObj["filter"]["kind"][0] = kind_get[0]
-            // console.log('setObj: ', setObj)
-            // QueryThingList(setObj).then(res => {
-            //     console.log(res.data)
-            //     console.log(res.data.data)
-            //     data = res.data.data.filter((dataObj) => {
-            //         return dataObj["is_active"] === true
-            //     })
-            //     console.log('data: ', data)
-            //     for (let i = 0; i < data.length; i++) {
-            //         data[i]['loading'] = false
-            //     }
-            // })
-            // setList([]);
-            // fetchData()
+            count = 0;
+            if (kind_get.length === 0) { setObj["filter"]["kind"][1] = "" }
+            else { setObj["filter"]["kind"][1] = kind_get[0] }
+            console.log('setObj: ', setObj)
+            QueryThingList(setObj).then(res => {
+                console.log(res.data)
+                console.log(res.data.data)
+                data = res.data.data.filter((dataObj) => {
+                    return dataObj["is_active"] === true
+                })
+                console.log('data: ', data)
+                for (let i = 0; i < data.length; i++) {
+                    data[i]['loading'] = false
+                }
+            })
+            fetchData()
         })
 
         // 高级筛选-筛选标签功能
         const labels_token = PubSub.subscribe('labels', (_, labels_get) => {
+            count = 0;
             if (labels_get.length === 0) { setObj["filter"]["labels"][1] = "" }
             else { setObj["filter"]["labels"][1] = labels_get[0] }
             QueryThingList(setObj).then(res => {
@@ -144,7 +147,6 @@ export default function LoadMoreList() {
                     data[i]['loading'] = false
                 }
             })
-            setList([]);
             fetchData()
         })
 
@@ -200,8 +202,42 @@ export default function LoadMoreList() {
         setVisible(!visible);
     };
 
+    // Tag 标签
+
+    useEffect(() => {
+        const labels = detailData.labels
+        if (labels !== undefined) {
+            const labelsArray = labels.split('#').slice(1, -1)
+            let newTagList = labelsArray.map((label) => {
+                return {
+                    color: 'white', children: label
+                }
+            })
+            setTagList(newTagList)
+        }
+    }, [detailData])
+
+    useEffect(() => { }, [tagList])
+
+    const divStyle = {
+        backgroundColor: 'var(--semi-color-fill-0)',
+        height: 35,
+        width: 300,
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 10px',
+        marginBottom: 30,
+    };
+
+    const tagGroupStyle = {
+        display: 'flex',
+        alignItems: 'center',
+        width: 350,
+    };
+
     return (
         <div>
+            {/* <button onClick={() => { forceUpdate() }}>刷新</button> */}
             <List
                 loading={loading}
                 loadMore={loadMore}
@@ -237,13 +273,23 @@ export default function LoadMoreList() {
                 {/* <h4>创建时间：{detailData.created_at}</h4> */}
                 {/* <h4>更新时间：{detailData.updated_at}</h4> */}
                 <h4>分类：{detailData.title}</h4>
-                <h4>标签：{detailData.labels}</h4>
-                <h4 style={{ color: 'orangered' }}>价格：{detailData.ori_price}</h4>
+
+                <h4>标签：</h4>
+                <div style={divStyle}>
+                    <TagGroup
+                        // maxTagCount={3}
+                        style={tagGroupStyle}
+                        tagList={tagList}
+                        size='large'
+                    />
+                </div>
+                <h4 style={{ color: 'orangered' }}>价格：{detailData.ori_price === null ? "免费" : detailData.ori_price}</h4>
                 <h4>剩余数量：{detailData.num}</h4>
+
                 <Banner fullMode={false} type="info" icon={null} closeIcon={null}
                     description={<div>描述：{detailData.description}</div>}
                 />
             </SideSheet>
-        </div>
+        </div >
     );
 }

@@ -22,7 +22,16 @@ export default function TopBar() {
             </Col>
             <Col span={12}>
                 <div className="right">
-                    <Input ref={inputRef} suffix={<IconSearch onClick={search} />} className={"search"}></Input>
+                    <Input
+                        ref={inputRef}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                search()
+                            }
+                        }}
+                        suffix={<IconSearch onClick={search} />}
+                        className={"search"}>
+                    </Input>
                 </div>
             </Col>
         </Row>
