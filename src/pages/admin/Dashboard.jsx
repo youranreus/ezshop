@@ -97,32 +97,23 @@ export default function Dashboard() {
     ];
 
     /**
-     * 判断登录态
+     * 判断登录态并获取礼品列表
      */
     useEffect(() => {
         if (!localStorage.getItem('access_token')) {
             Toast.info('请先登录')
             navi('/admin/login');
-        } else {
-            Toast.info({
-                content: '自动登录成功',
-                duration: 2
+        }
+        else {
+            QueryThingList().then(res => {
+                if(res.data.code !== 200) {
+                    Toast.info(res.data.msg)
+                } else {
+                    updateItemList(res.data.data)
+                }
             })
         }
         // eslint-disable-next-line
-    }, []);
-
-    /**
-     * 获取礼品列表
-     */
-    useEffect(() => {
-        QueryThingList().then(res => {
-            if(res.data.code !== 200) {
-                Toast.info(res.data.msg)
-            } else {
-                updateItemList(res.data.data)
-            }
-        })
     }, []);
 
     /**
