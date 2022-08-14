@@ -15,7 +15,11 @@ export default function Base() {
             <Content className={"content"}>
                 <Outlet/>
             </Content>
-            <Footer>Footer</Footer>
+            <Footer>
+                <div className={"footer"}>
+                    <p>made with ❤ by SZTU ACM</p>
+                </div>
+            </Footer>
         </div>
     );
 }
