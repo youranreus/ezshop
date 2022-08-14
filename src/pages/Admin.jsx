@@ -3,12 +3,23 @@
  * @date 2022-08-08
  */
 import { Layout, Col, Row } from '@douyinfe/semi-ui';
-import {Outlet} from "react-router-dom";
+import {Outlet, useNavigate} from "react-router-dom";
 import {Link} from "react-router-dom";
 import '../style/admin.scss';
 
 export default function Admin() {
     const {Header, Content, Footer} = Layout;
+    const navi = useNavigate();
+
+    /**
+     * 登出
+     */
+    const logout = () => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+
+        navi('/admin/login');
+    }
 
     return (
         <div className={"admin"}>
@@ -19,6 +30,7 @@ export default function Admin() {
                             <Row>
                                 <Col span={12}>礼品Go 后台管理</Col>
                                 <Col span={12} style={{textAlign: "right"}}>
+                                    <span onClick={logout} className={"return"}>退出登录</span>
                                     <Link to={'/'} className={"return"}>返回前台</Link>
                                 </Col>
                             </Row>
