@@ -2,11 +2,19 @@
  * @author 季悠然
  * @date 2022-08-06
  */
+import { useRef } from 'react'
+import PubSub from 'pubsub-js'
 import '../style/Header.scss'
 import { Col, Row, Input } from '@douyinfe/semi-ui';
 import { IconSearch } from '@douyinfe/semi-icons';
 
 export default function TopBar() {
+    const inputRef = useRef()
+
+    function search() {
+        PubSub.publish('search', inputRef.current.value)
+    }
+
     return (<div className={"top-bar"}>
         <Row>
             <Col span={12}>
@@ -14,7 +22,16 @@ export default function TopBar() {
             </Col>
             <Col span={12}>
                 <div className="right">
-                    <Input suffix={<IconSearch />} className={"search"}></Input>
+                    <Input
+                        ref={inputRef}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                search()
+                            }
+                        }}
+                        suffix={<IconSearch onClick={search} />}
+                        className={"search"}>
+                    </Input>
                 </div>
             </Col>
         </Row>
