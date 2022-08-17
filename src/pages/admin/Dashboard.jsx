@@ -206,7 +206,7 @@ export default function Dashboard() {
      */
     const handleEdit = () => {
         const obj = {}
-        const keys = ['id', 'title', 'description', 'kind', 'path_img', 'labels', 'num', 'ori_price']
+        const keys = ['id', 'title', 'description', 'kind', 'path_img', 'labels', 'num', 'ori_price', 'is_active']
         keys.forEach(key => { obj[key] = newItem[key] })
         obj.labels = '#' + obj.labels.join('#') + '#'
 
