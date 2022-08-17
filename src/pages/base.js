@@ -10,7 +10,7 @@ export default function Base() {
     const {Header, Content, Footer} = Layout;
 
     return (
-        <div>
+        <div className={"display"}>
             <Header className={"header"}><TopBar/></Header>
             <Content className={"content"}>
                 <Outlet/>

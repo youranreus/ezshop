@@ -29,4 +29,13 @@
       font-size: 0.875rem;
     }
   }
+
+  .display {
+    max-width: 580px;
+    margin: 0 auto;
+
+    .header {
+      max-width: 580px;
+    }
+  }
 }
