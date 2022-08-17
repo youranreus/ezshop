@@ -97,32 +97,23 @@ export default function Dashboard() {
     ];
 
     /**
-     * 判断登录态
+     * 判断登录态并获取礼品列表
      */
     useEffect(() => {
         if (!localStorage.getItem('access_token')) {
             Toast.info('请先登录')
             navi('/admin/login');
-        } else {
-            Toast.info({
-                content: '自动登录成功',
-                duration: 2
+        }
+        else {
+            QueryThingList().then(res => {
+                if(res.data.code !== 200) {
+                    Toast.info(res.data.msg)
+                } else {
+                    updateItemList(res.data.data)
+                }
             })
         }
         // eslint-disable-next-line
-    }, []);
-
-    /**
-     * 获取礼品列表
-     */
-    useEffect(() => {
-        QueryThingList().then(res => {
-            if(res.data.code !== 200) {
-                Toast.info(res.data.msg)
-            } else {
-                updateItemList(res.data.data)
-            }
-        })
     }, []);
 
     /**
@@ -215,7 +206,7 @@ export default function Dashboard() {
      */
     const handleEdit = () => {
         const obj = {}
-        const keys = ['id', 'title', 'description', 'kind', 'path_img', 'labels', 'num', 'ori_price']
+        const keys = ['id', 'title', 'description', 'kind', 'path_img', 'labels', 'num', 'ori_price', 'is_active']
         keys.forEach(key => { obj[key] = newItem[key] })
         obj.labels = '#' + obj.labels.join('#') + '#'
 
