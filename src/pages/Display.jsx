@@ -5,8 +5,9 @@
 import {Outlet} from "react-router-dom";
 import {Layout} from "@douyinfe/semi-ui";
 import TopBar from "../components/Header";
+import '../style/display.scss';
 
-export default function Base() {
+export default function Display() {
     const {Header, Content, Footer} = Layout;
 
     return (

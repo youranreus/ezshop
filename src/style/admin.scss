@@ -1,5 +1,14 @@
 .admin {
   .header {
+    position: fixed;
+    top: 0;
+    background: var( --semi-color-bg-3);
+    border-bottom: 1px solid var( --semi-color-border);
+    width: 100vw;
+    height: 3rem;
+    line-height: 3rem;
+    z-index: 999;
+
     .return {
       font-weight: 600;
       text-decoration: none;

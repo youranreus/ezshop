@@ -20,7 +20,7 @@ import {
     Avatar
 } from "@douyinfe/semi-ui";
 import {AddGift, DelGift, QueryThingList, UpdateGift} from "../../api/admin";
-import NumEditor from "./NumEditor";
+import NumEditor from "../../components/admin/NumEditor";
 
 export default function Dashboard() {
     const navi = useNavigate();
