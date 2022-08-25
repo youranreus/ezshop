@@ -3,17 +3,27 @@
  * @date 2022-08-05
  */
 import Filter from "../../components/filter";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {QueryThingList} from "../../api/gift";
 
 function Index() {
     const [filterObj, setFilterObj] = useState({});
 
-    const getFilterObject = (obj) => {
-        setFilterObj(obj);
-        QueryThingList(obj).then(res => {
+    /**
+     * 获取礼物列表
+     */
+    useEffect(()=> {
+        QueryThingList(filterObj).then(res => {
             console.log(res);
         })
+    }, [filterObj]);
+
+    /**
+     * 更新筛选表单值
+     * @param obj
+     */
+    const getFilterObject = (obj) => {
+        setFilterObj(obj);
     }
 
     return (
