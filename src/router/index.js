@@ -6,6 +6,7 @@ import Display from "../pages/Display";
 import Admin from "../pages/Admin";
 import Login from "../pages/admin/Login";
 import Dashboard from "../pages/admin/Dashboard";
+import ResetPwd from "../pages/admin/ResetPwd";
 
 const routes = [
     {
@@ -23,6 +24,10 @@ const routes = [
             {
                 index: true,
                 element: <Dashboard/>
+            },
+            {
+                path: "/admin/reset",
+                element: <ResetPwd/>
             }
         ]
     }

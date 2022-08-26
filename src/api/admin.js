@@ -16,3 +16,5 @@ export const QueryThingList = (json) => API.get(`/thing_list${json ? '?json='+js
 export const DelGift = id => APIWithAuth.delete('/thing?json='+ getQueryJson({id: id}));
 
 export const UpdateGift = data => APIWithAuth.put('/thing', data);
+
+export const ResetPassword = data => APIWithAuth.put('/user', data);

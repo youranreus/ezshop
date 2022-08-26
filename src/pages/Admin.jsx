@@ -30,7 +30,12 @@ export default function Admin() {
                             <Row>
                                 <Col span={12}>礼品Go 后台管理</Col>
                                 <Col span={12} style={{textAlign: "right"}}>
-                                    <span onClick={logout} className={"return"}>退出登录</span>
+                                    {
+                                        localStorage.getItem('access_token') ? <Link to={'/admin/reset'} className={"return"}>修改密码</Link> : ""
+                                    }
+                                    {
+                                        localStorage.getItem('access_token') ? <span onClick={logout} className={"return"}>退出登录</span> : ""
+                                    }
                                     <Link to={'/'} className={"return"}>返回前台</Link>
                                 </Col>
                             </Row>
