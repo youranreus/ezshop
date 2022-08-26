@@ -5,8 +5,8 @@
   .header {
     position: fixed;
     top: 0;
-    background: var( --semi-color-bg-3);
-    border-bottom: 1px solid var( --semi-color-border);
+    background: var(--semi-color-bg-3);
+    border-bottom: 1px solid var(--semi-color-border);
     width: 100vw;
     height: 3rem;
     line-height: 3rem;
@@ -24,6 +24,48 @@
         align-items: center;
         height: 80vh;
         top: 0;
+      }
+
+      .item-list {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: -2.9rem;
+
+        .item {
+          width: calc((100% - 1.5rem) / 2);
+          margin: .25rem .5rem;
+
+          &:nth-of-type(2n) {
+            margin-left: .25rem;
+          }
+
+          &:nth-of-type(2n-1) {
+            margin-right: .25rem;
+          }
+
+          h4 {
+            font-size: 1rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          .meta {
+            margin-top: 10px;
+
+            .price {
+              font-size: 1rem;
+              color: var(--semi-color-primary);
+            }
+
+            .kind {
+              font-size: .8rem;
+              color: var(--semi-color-text-secondary);
+              opacity: 0.8;
+              font-style: italic;
+            }
+          }
+        }
       }
     }
   }

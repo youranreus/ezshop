@@ -7,6 +7,7 @@ import {useEffect, useState} from "react";
 import {QueryThingList} from "../../api/gift";
 import {Spin, Toast} from "@douyinfe/semi-ui";
 import { IconLoading } from '@douyinfe/semi-icons';
+import ItemList from "../../components/display/ItemList";
 
 function Index() {
     const [filterObj, setFilterObj] = useState({});
@@ -41,9 +42,10 @@ function Index() {
         <div className="index">
             <Filter callback={getFilterObject}/>
             <div className="content">
-                <div className="loading">
-                    <Spin indicator={<IconLoading />} size={"large"} spinning={loading}/>
-                </div>
+                {loading && <div className="loading">
+                    <Spin indicator={<IconLoading />} size={"large"}/>
+                </div>}
+                {!loading && <ItemList listData={itemList}/>}
             </div>
         </div>
     );
