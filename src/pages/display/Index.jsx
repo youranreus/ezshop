@@ -3,13 +3,17 @@
  * @date 2022-08-05
  */
 import Filter from "../../components/filter";
-import {useEffect, useState} from "react";
+import {useEffect, useState, forwardRef, useImperativeHandle} from "react";
 import {QueryThingList} from "../../api/gift";
 import {Spin, Toast, Button} from "@douyinfe/semi-ui";
 import {IconLoading} from '@douyinfe/semi-icons';
 import ItemList from "../../components/display/ItemList";
 
-function Index() {
+const Index = forwardRef(({ }, ref) => {
+    useImperativeHandle(ref, () => ({
+        setData: setFilterObj
+    }))
+
     const [filterObj, setFilterObj] = useState({
         filter: {
             ori_price: [">=", "0"],
@@ -80,6 +84,6 @@ function Index() {
             </div>
         </div>
     );
-}
+})
 
 export default Index;

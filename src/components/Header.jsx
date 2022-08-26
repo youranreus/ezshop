@@ -3,16 +3,19 @@
  * @date 2022-08-06
  */
 import { useRef } from 'react'
-import PubSub from 'pubsub-js'
 import '../style/Header.scss'
 import { Col, Row, Input } from '@douyinfe/semi-ui';
 import { IconSearch } from '@douyinfe/semi-icons';
 
-export default function TopBar() {
+export default function TopBar(props) {
     const inputRef = useRef()
+    const {searchCallback} = props
 
+    /**
+     * 搜索回调
+     */
     function search() {
-        PubSub.publish('search', inputRef.current.value)
+        searchCallback(inputRef.current.value)
     }
 
     return (<div className={"top-bar"}>
