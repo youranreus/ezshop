@@ -30,7 +30,6 @@ function Index() {
         const len = itemList.length;
         if (len === 0) setLoading(true);
         QueryThingList(filterObj).then(res => {
-            console.log(res.data);
             if (res.data.code === 200) {
                 if (filterObj.page !== 1) {
                     updateItemList(itemList.concat(res.data.data));
