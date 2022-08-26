@@ -26,7 +26,10 @@ export default function Filter(props) {
      * 高级筛选表单值
      */
     const [filterObj, updateFilterObj] = useState({
-        filter: {},
+        filter: {
+            ori_price: [">=", "0"],
+            is_active: ["==", "1"]
+        },
         order: {},
         page: 1,
         per_page: 10
@@ -94,13 +97,19 @@ export default function Filter(props) {
      */
     const reset = () => {
         updateFilterObj({
-            filter: {},
+            filter: {
+                ori_price: [">=", "0"],
+                is_active: ["==", "1"]
+            },
             order: {},
             page: 1,
             per_page: 10
         });
         callback({
-            filter: {},
+            filter: {
+                ori_price: [">=", "0"],
+                is_active: ["==", "1"]
+            },
             order: {},
             page: 1,
             per_page: 10
