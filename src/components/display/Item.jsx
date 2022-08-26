@@ -2,18 +2,38 @@
  * @author 季悠然
  * @date 2022-08-07
  */
-import {Card, Col, Row} from '@douyinfe/semi-ui';
+import {Card, Col, Row, Skeleton} from '@douyinfe/semi-ui';
+import {useEffect, useState} from "react";
 
 export default function Item(props) {
     const {itemData} = props;
+    const [loading, setLoading] = useState(true);
+
+    /**
+     * 图片懒加载
+     */
+    useEffect(() => {
+        new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+                resolve(img.src);
+            }
+            img.src = itemData.path_img;
+        }).then(success => {
+            setLoading(false);
+        })
+    }, []);
 
     return (<div className={"item"}>
         <Card
             cover={
-                <img
-                    alt={itemData.title}
-                    src={itemData.path_img}
-                />
+                <Skeleton loading={loading} placeholder={<Skeleton.Image/>} active={true}
+                          style={{width: "calc((100vw - 1.5rem) /2)", height: "calc((100vw - 1.5rem) /2)"}}>
+                    <img
+                        alt={itemData.title}
+                        src={itemData.path_img}
+                    />
+                </Skeleton>
             }
             bodyStyle={{padding: '8px'}}
         >
