@@ -309,7 +309,7 @@ export default function Dashboard() {
                 }
             </div>
 
-            <SideSheet title={"添加礼品"} keepDOM={true} footer={AddFooter} visible={addPanel} onCancel={() => {
+            <SideSheet title={"添加礼品"} width={375} keepDOM={true} footer={AddFooter} visible={addPanel} onCancel={() => {
                 setAddPanel(false)
             }}>
                 <div className="add-panel">
@@ -333,7 +333,7 @@ export default function Dashboard() {
                 </div>
             </SideSheet>
 
-            <SideSheet title={"修改礼品"} footer={EditFooter} visible={editPanel} onCancel={() => {
+            <SideSheet title={"修改礼品"} width={375} footer={EditFooter} visible={editPanel} onCancel={() => {
                 setEditPanel(false)
             }}>
                 <div className="edit-panel">
