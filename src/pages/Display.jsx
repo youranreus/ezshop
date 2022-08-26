@@ -18,7 +18,7 @@ export default function Display() {
             </Content>
             <Footer>
                 <div className={"footer"}>
-                    <p>made with ❤ by SZTU ACM</p>
+                    <p>made with ❤ by S-ACM</p>
                 </div>
             </Footer>
         </div>
