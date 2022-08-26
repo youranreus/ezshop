@@ -41,9 +41,9 @@ export default function Dashboard() {
             dataIndex: 'title',
             render: (text, record, index) => {
                 return (
-                    <div>
-                        <Avatar className={"item-img"} size="small" shape="square" src={record.path_img} style={{ marginRight: 12 }}></Avatar>
-                        {text}
+                    <div className={"thing"}>
+                        <Avatar className={"img"} size="small" shape="square" src={record.path_img} style={{ marginRight: 12 }}></Avatar>
+                        <p style={{overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>{text}</p>
                     </div>
                 );
             },
