@@ -91,20 +91,6 @@ export default function Item(props) {
                     <div className="info">
                         {itemData.description}
                     </div>
-
-                    {
-                        itemData.addition_info && (
-                            <>
-                                <Divider margin='12px'>
-                                    补充说明
-                                </Divider>
-
-                                <div className="info">
-                                    {itemData.addition_info}
-                                </div>
-                            </>
-                        )
-                    }
                 </div>
             </div>
         </SideSheet>
