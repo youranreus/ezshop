@@ -42,24 +42,28 @@ export default function Dashboard() {
             render: (text, record, index) => {
                 return (
                     <div>
-                        <Avatar size="small" shape="square" src={record.path_img} style={{ marginRight: 12 }}></Avatar>
+                        <Avatar className={"item-img"} size="small" shape="square" src={record.path_img} style={{ marginRight: 12 }}></Avatar>
                         {text}
                     </div>
                 );
-            }
+            },
+            width: 200
         },
         {
             title: '数量',
             dataIndex: 'num',
+            width: 100
         },
         {
             title: '分类',
             dataIndex: 'kind',
+            width: 100
         },
         {
             title: '状态',
             dataIndex: 'is_active',
-            render: (text, record) => <div>{record.is_active ? "已上架" : "已下架"}</div>
+            render: (text, record) => <div>{record.is_active ? "已上架" : "已下架"}</div>,
+            width: 100
         },
         {
             title: '标签',
@@ -71,7 +75,8 @@ export default function Dashboard() {
                 })
 
                 return (<div><TagGroup tagList={arr}/></div>)
-            }
+            },
+            width: 100
         },
         {
             title: '数量操作',
@@ -80,7 +85,8 @@ export default function Dashboard() {
                 return (
                     <NumEditor record={record} index={index} handler={handleUpdateNum}/>
                 );
-            }
+            },
+            width: 100
         },
         {
             title: '其他操作',
@@ -92,7 +98,8 @@ export default function Dashboard() {
                         <Button type={"danger"} icon={<IconDelete />} onClick={() => handleDelete(record, index)}/>
                     </ButtonGroup>
                 );
-            }
+            },
+            width: 100
         },
     ];
 
@@ -284,22 +291,16 @@ export default function Dashboard() {
     return (
         <div className={"dashboard"}>
             <div className="head">
-                <Row>
-                    <Col span={12}>
-                        <Title heading={3}>物品管理</Title>
-                    </Col>
-                    <Col span={12} className={"right"}>
-                        <Space>
-                            <Button icon={<IconPlus/>} theme={"solid"} onClick={() => {
-                                setAddPanel(true)
-                            }}>添加礼品</Button>
-                            <ButtonGroup type={"secondary"}>
-                                <Button onClick={() => handleActive(true)}>批量上架礼品</Button>
-                                <Button onClick={() => handleActive(false)}>批量下架礼品</Button>
-                            </ButtonGroup>
-                        </Space>
-                    </Col>
-                </Row>
+                <Title heading={3}>物品管理</Title>
+                <Space>
+                    <Button icon={<IconPlus/>} theme={"solid"} onClick={() => {
+                        setAddPanel(true)
+                    }}>添加礼品</Button>
+                    <ButtonGroup type={"secondary"}>
+                        <Button onClick={() => handleActive(true)}>批量上架礼品</Button>
+                        <Button onClick={() => handleActive(false)}>批量下架礼品</Button>
+                    </ButtonGroup>
+                </Space>
             </div>
 
             <div className="thing-list">

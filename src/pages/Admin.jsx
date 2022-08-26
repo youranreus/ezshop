@@ -26,7 +26,7 @@ export default function Admin() {
             <Layout>
                 <Header>
                     <div className="header">
-                        <div style={{margin: "0 5rem"}}>
+                        <div className={"header-content"}>
                             <Row>
                                 <Col span={12}>礼品Go 后台管理</Col>
                                 <Col span={12} style={{textAlign: "right"}}>
