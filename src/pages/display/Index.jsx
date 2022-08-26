@@ -28,18 +28,15 @@ function Index() {
      */
     useEffect(() => {
         const len = itemList.length;
-        setLoading(true);
+        if (len === 0) setLoading(true);
         QueryThingList(filterObj).then(res => {
             console.log(res.data);
             if (res.data.code === 200) {
-                if (filterObj.page !== 1)
-                {
+                if (filterObj.page !== 1) {
                     updateItemList(itemList.concat(res.data.data));
                     if (res.data.returned + len >= res.data.total) setMore(false);
                     else setMore(true);
-                }
-                else
-                {
+                } else {
                     updateItemList(res.data.data);
                     if (res.data.returned === res.data.total) setMore(false);
                     else setMore(true);
