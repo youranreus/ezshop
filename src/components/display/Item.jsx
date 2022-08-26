@@ -44,7 +44,7 @@ export default function Item(props) {
                         <span className={"kind"}># {itemData.kind}</span>
                     </Col>
                     <Col span={12} style={{textAlign: "right"}}>
-                        <span className={"price"}>{itemData.ori_price}</span>
+                        <span className={"price"}>￥{itemData.ori_price}</span>
                     </Col>
                 </Row>
             </div>

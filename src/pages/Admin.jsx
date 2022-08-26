@@ -45,7 +45,7 @@ export default function Admin() {
                 <Footer>
                     <div className="footer">
                         <div style={{margin: "0 5rem"}}>
-                            <p>made with ❤ by SZTU ACM</p>
+                            <p>made with ❤ by S-ACM</p>
                         </div>
                     </div>
                 </Footer>
