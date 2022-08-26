@@ -53,7 +53,8 @@ export default function Item(props) {
             </Card>
         </div>
 
-        <SideSheet title={"礼品详情"} visible={showDetail} height={"90vh"} placement={"bottom"} onCancel={() => setShowDetail(false)}>
+        <SideSheet title={"礼品详情"} visible={showDetail} height={"90vh"} placement={"bottom"}
+                   onCancel={() => setShowDetail(false)}>
             <div className="detail" style={{maxWidth: "580px", margin: "0 auto"}}>
                 <Skeleton loading={loading} placeholder={<Skeleton.Image/>} active={true}>
                     <img
@@ -90,6 +91,20 @@ export default function Item(props) {
                     <div className="info">
                         {itemData.description}
                     </div>
+
+                    {
+                        itemData.addition_info && (
+                            <>
+                                <Divider margin='12px'>
+                                    补充说明
+                                </Divider>
+
+                                <div className="info">
+                                    {itemData.addition_info}
+                                </div>
+                            </>
+                        )
+                    }
                 </div>
             </div>
         </SideSheet>
