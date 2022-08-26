@@ -2,7 +2,7 @@
  * @author 季悠然
  * @date 2022-08-06
  */
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import '../../style/filter.scss';
 import {Col, Row, Select, SideSheet, Button, Space, Banner, Form} from '@douyinfe/semi-ui';
 
@@ -31,6 +31,11 @@ export default function Filter(props) {
         page: 1,
         per_page: 10
     });
+
+    /**
+     * 表单API
+     */
+    const formApi = useRef();
 
     /**
      * 回调函数，用于更新筛选表单值
@@ -84,6 +89,26 @@ export default function Filter(props) {
         callback(newValue);
     }
 
+    /**
+     * 重置筛选表单
+     */
+    const reset = () => {
+        updateFilterObj({
+            filter: {},
+            order: {},
+            page: 1,
+            per_page: 10
+        });
+        callback({
+            filter: {},
+            order: {},
+            page: 1,
+            per_page: 10
+        });
+        formApi.current.reset();
+        toggle();
+    }
+
 
     /**
      * 自定义筛选表单Footer
@@ -93,6 +118,7 @@ export default function Filter(props) {
         return (<div style={{display: 'flex', justifyContent: 'flex-end'}}>
             <Space>
                 <Button theme='borderless' onClick={toggle}>取消</Button>
+                <Button theme='borderless' onClick={reset}>重置</Button>
                 <Button theme='solid' onClick={submit}>确认</Button>
             </Space>
         </div>)
@@ -114,7 +140,7 @@ export default function Filter(props) {
 
                 <SideSheet keepDOM={true} footer={advancedFooter()} title="高级筛选" visible={visible} onCancel={toggle}
                            placement={"bottom"}>
-                    <Form onValueChange={update}>
+                    <Form onValueChange={update} getFormApi={a => formApi.current = a}>
                         <Form.Input label={"分类"} field={"filter.kind"}/>
                         <Form.TagInput label={"标签"} field={"filter.labels"}/>
                     </Form>
