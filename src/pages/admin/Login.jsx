@@ -15,10 +15,7 @@ export default function Login () {
 
     const submit = () => {
         if(password === '' || username === '') {
-            Toast.warning({
-                content: "用户名或密码不能为空",
-                duration: 2
-            })
+            Toast.warning("用户名或密码不能为空")
         }
         else
         {
@@ -26,10 +23,7 @@ export default function Login () {
             login(username, password).then(res => {
                 console.log(res)
                 if (res.data.code === 200) {
-                    Toast.success({
-                        content: "登陆成功",
-                        duration: 2
-                    })
+                    Toast.success("登陆成功")
                     localStorage.setItem('access_token', res.data.access_token);
                     localStorage.setItem('refresh_token', res.data.refresh_token);
                     localStorage.setItem('user_id', username);

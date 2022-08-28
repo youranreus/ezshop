@@ -29,23 +29,23 @@ export default function ResetPwd() {
      */
     const submit = () => {
         if (password === '') {
-            Toast.warning({
-                content: "密码不能为空",
-                duration: 2
-            })
+            Toast.warning("密码不能为空");
         } else if (password !== verify_password) {
-            Toast.warning({
-                content: "两次密码不一致",
-                duration: 2
-            })
+            Toast.warning("两次密码不一致")
         } else {
             setLoading(true);
             ResetPassword({
                 name: localStorage.getItem('user_id'),
-                password: password,
-                verify_password: verify_password
+                password: password
             }).then(res => {
-                console.log(res);
+                if(res.data.code === 200) {
+                    Toast.success("修改成功");
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('refresh_token');
+                    navi('/admin/login');
+                } else {
+                    Toast.error(res.data.msg);
+                }
                 setLoading(false);
             })
         }
