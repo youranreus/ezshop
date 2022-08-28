@@ -4,7 +4,7 @@
  */
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IconPlus, IconDelete, IconEdit } from "@douyinfe/semi-icons";
+import { IconPlus, IconDelete, IconEdit, IconSearch } from "@douyinfe/semi-icons";
 import {
 	TagGroup,
 	Toast,
@@ -18,6 +18,7 @@ import {
 	Form,
 	Table,
 	Avatar,
+	Input,
 } from "@douyinfe/semi-ui";
 import { AddGift, DelGift, QueryThingList, UpdateGift } from "../../api/admin";
 import NumEditor from "../../components/admin/NumEditor";
@@ -30,6 +31,7 @@ export default function Dashboard() {
 	const [newItem, setNewItem] = useState({});
 	const [itemList, updateItemList] = useState([]);
 	const [selectedList, setSelectedList] = useState([]);
+	const [keyword, setKeyword] = useState("");
 
 	/**
 	 * 表格列定义
@@ -311,6 +313,23 @@ export default function Dashboard() {
 			});
 	};
 
+	/**
+	 * search搜索回调
+	 */
+	const handleSearch = () => {
+		QueryThingList({
+			filter: {
+				title: ["like", keyword],
+			}
+		}).then((res) => {
+			if (res.data.code !== 200) {
+				Toast.info(res.data.msg);
+			} else {
+				updateItemList(res.data.data);
+			}
+		});
+	}
+
 	const AddFooter = (
 		<div style={{ display: "flex", justifyContent: "flex-end" }}>
 			<Button theme="solid" onClick={handleSubmit}>
@@ -346,6 +365,9 @@ export default function Dashboard() {
 						<Button onClick={() => handleActive(false)}>批量下架礼品</Button>
 					</ButtonGroup>
 				</Space>
+				<div className="search">
+					<Input placeholder={"搜索物品"} prefix={<IconSearch />} value={keyword} onChange={v => setKeyword(v)} onEnterPress={handleSearch}></Input>
+				</div>
 			</div>
 
 			<div className="thing-list">

@@ -12,8 +12,8 @@ export const login = (username, password) =>
 
 export const AddGift = (data) => APIWithAuth.post("/thing", data);
 
-export const QueryThingList = (json) =>
-	API.get(`/thing_list${json ? "?json=" + json : ""}`);
+export const QueryThingList = (obj) =>
+	API.get(`/thing_list${obj ? "?json=" + getQueryJson(obj) : ""}`);
 
 export const DelGift = (id) =>
 	APIWithAuth.delete("/thing?json=" + getQueryJson({ id: id }));
