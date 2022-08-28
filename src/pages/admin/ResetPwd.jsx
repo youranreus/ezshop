@@ -105,7 +105,7 @@ export default function ResetPwd() {
 						type={"primary"}
 						onClick={submit}
 					>
-						登录
+						修改
 					</Button>
 				</div>
 			</Card>
