@@ -10,7 +10,7 @@ export default function ItemList(props) {
 	return (
 		<div className={"item-list"}>
 			{listData.map((item) =>
-				item.is_active && item.ori_price && item.ori_price !== -1 ? (
+				item.is_active && item.ori_price !== -1 ? (
 					<Item itemData={item} key={item.id} />
 				) : (
 					""
