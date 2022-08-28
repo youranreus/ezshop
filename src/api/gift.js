@@ -3,7 +3,8 @@
  * @date 2022-08-10
  */
 
-import API from './index'
+import API from "./index";
 import { getQueryJson } from "../utils";
 
-export const QueryThingList = data => API.get(`/thing_list${data ? '?json=' + getQueryJson(data) : ''}`)
+export const QueryThingList = (data) =>
+	API.get(`/thing_list${data ? "?json=" + getQueryJson(data) : ""}`);

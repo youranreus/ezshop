@@ -9,27 +9,27 @@ import Dashboard from "../pages/admin/Dashboard";
 import ResetPwd from "../pages/admin/ResetPwd";
 
 const routes = [
-    {
-        path: "/",
-        element: <Display/>
-    },
-    {
-        path: "/admin",
-        element: <Admin/>,
-        children: [
-            {
-                path: "/admin/login",
-                element: <Login/>
-            },
-            {
-                index: true,
-                element: <Dashboard/>
-            },
-            {
-                path: "/admin/reset",
-                element: <ResetPwd/>
-            }
-        ]
-    }
+	{
+		path: "/",
+		element: <Display />,
+	},
+	{
+		path: "/admin",
+		element: <Admin />,
+		children: [
+			{
+				path: "/admin/login",
+				element: <Login />,
+			},
+			{
+				index: true,
+				element: <Dashboard />,
+			},
+			{
+				path: "/admin/reset",
+				element: <ResetPwd />,
+			},
+		],
+	},
 ];
 export default routes;

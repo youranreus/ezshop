@@ -5,9 +5,17 @@
 import Item from "./Item";
 
 export default function ItemList(props) {
-    const {listData} = props;
+	const { listData } = props;
 
-    return (<div className={"item-list"}>
-        {listData.map(item => (item.is_active && item.ori_price && item.ori_price !== -1) ? <Item itemData={item} key={item.id}/> : "")}
-    </div>)
+	return (
+		<div className={"item-list"}>
+			{listData.map((item) =>
+				item.is_active && item.ori_price && item.ori_price !== -1 ? (
+					<Item itemData={item} key={item.id} />
+				) : (
+					""
+				)
+			)}
+		</div>
+	);
 }
