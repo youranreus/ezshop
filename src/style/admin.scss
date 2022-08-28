@@ -9,6 +9,12 @@
     line-height: 3rem;
     z-index: 999;
 
+    .title a{
+      font-size: 1.125rem;
+      color: var(--semi-color-primary);
+      text-decoration: none;
+    }
+
     .header-content {
       margin: 0 5rem;
     }

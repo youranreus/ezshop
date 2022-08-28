@@ -28,7 +28,13 @@ export default function Admin() {
 					<div className="header">
 						<div className={"header-content"}>
 							<Row>
-								<Col span={12}>礼品Go 后台管理</Col>
+								<Col span={12}>
+									<div className="title">
+										<Link to={"/admin"}>
+											礼品Go 后台管理
+										</Link>
+									</div>
+								</Col>
 								<Col span={12} style={{ textAlign: "right" }}>
 									{localStorage.getItem("access_token") ? (
 										<Link to={"/admin/reset"} className={"return"}>
