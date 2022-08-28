@@ -8,6 +8,7 @@ import { Card, Input, Button, Toast } from "@douyinfe/semi-ui";
 import { ResetPassword } from "../../api/admin";
 
 export default function ResetPwd() {
+	const [currentPwd, setCurrentPwd] = useState("");
 	const [password, setPwd] = useState("");
 	const [verify_password, setVPwd] = useState("");
 	const [loading, setLoading] = useState(false);
@@ -40,6 +41,7 @@ export default function ResetPwd() {
 			ResetPassword({
 				name: localStorage.getItem("user_id"),
 				password: password,
+				verify_password: currentPwd
 			}).then((res) => {
 				if (res.data.code === 200) {
 					Toast.success("修改成功");
@@ -68,6 +70,15 @@ export default function ResetPwd() {
 						className={"input"}
 						value={localStorage.getItem("user_id")}
 						disabled={true}
+					></Input>
+					<h4>当前密码</h4>
+					<Input
+						className={"input"}
+						value={currentPwd}
+						onChange={(v) => {
+							setCurrentPwd(v);
+						}}
+						type={"password"}
 					></Input>
 					<h4>新密码</h4>
 					<Input
