@@ -18,6 +18,7 @@ export default function Item(props) {
 	const { itemData } = props;
 	const [loading, setLoading] = useState(true);
 	const [showDetail, setShowDetail] = useState(false);
+	const [aspectRatio, setRatio] = useState("1/1");
 
 	/**
 	 * 图片懒加载
@@ -32,8 +33,24 @@ export default function Item(props) {
 		}).then((success) => {
 			setLoading(false);
 		});
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	/**
+	 * 放大缩小图片
+	 */
+	const zoom = () => {
+		const img = new Image();
+		img.onload = () => {
+			console.log(img.width, img.height);
+			if (aspectRatio === "1/1") {
+				setRatio(`${img.width}/${img.height}`);
+			} else {
+				setRatio("1/1");
+			}
+		};
+		img.src = itemData.path_img;
+	};
 
 	return (
 		<div className={"item"}>
@@ -97,9 +114,12 @@ export default function Item(props) {
 					>
 						<div
 							className="cover"
-							style={{ backgroundImage: `url(${itemData.path_img})` }}
+							style={{ backgroundImage: `url(${itemData.path_img})`, aspectRatio: aspectRatio }}
 						>
-							<span>还剩 {itemData.num} 件</span>
+							<span className="zoom" onClick={zoom}>
+								查看大图
+							</span>
+							<span className="num">还剩 {itemData.num} 件</span>
 						</div>
 					</Skeleton>
 					<h4>{itemData.title}</h4>
