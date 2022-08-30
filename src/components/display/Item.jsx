@@ -45,10 +45,11 @@ export default function Item(props) {
 							active={true}
 							style={{
 								width: "calc((100vw - 1.5rem) /2)",
-								height: "calc((100vw - 1.5rem) /2)",
+								height: "200px",
+								aspectRatio: "1/1",
 							}}
 						>
-							<img alt={itemData.title} src={itemData.path_img} />
+							<div className="cover" style={{backgroundImage: `url(${itemData.path_img})`}}></div>
 						</Skeleton>
 					}
 					bodyStyle={{ padding: "8px" }}
