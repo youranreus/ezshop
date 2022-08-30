@@ -350,22 +350,6 @@ export default function Dashboard() {
 		});
 	};
 
-	const AddFooter = (
-		<div style={{ display: "flex", justifyContent: "flex-end" }}>
-			<Button theme="solid" onClick={handleSubmit}>
-				添加
-			</Button>
-		</div>
-	);
-
-	const EditFooter = (
-		<div style={{ display: "flex", justifyContent: "flex-end" }}>
-			<Button theme="solid" onClick={handleEdit}>
-				修改
-			</Button>
-		</div>
-	);
-
 	return (
 		<div className={"dashboard"}>
 			<div className="head">
@@ -411,13 +395,12 @@ export default function Dashboard() {
 				title={"添加礼品"}
 				width={375}
 				keepDOM={true}
-				footer={AddFooter}
 				visible={addPanel}
 				onCancel={() => {
 					setAddPanel(false);
 				}}
 			>
-				<div className="add-panel">
+				<div className="add-panel"  style={{maxHeight: "85vh", overflow: "auto"}}>
 					<Form
 						onChange={(v) => {
 							setNewItem(v.values);
@@ -469,19 +452,24 @@ export default function Dashboard() {
 							rules={[{ required: true, message: "这是必填项～" }]}
 						/>
 					</Form>
+
+					<div style={{ display: "flex", justifyContent: "flex-end" }}>
+						<Button theme="solid" onClick={handleSubmit}>
+							添加
+						</Button>
+					</div>
 				</div>
 			</SideSheet>
 
 			<SideSheet
 				title={"修改礼品"}
 				width={375}
-				footer={EditFooter}
 				visible={editPanel}
 				onCancel={() => {
 					setEditPanel(false);
 				}}
 			>
-				<div className="edit-panel">
+				<div className="edit-panel" style={{maxHeight: "85vh", overflow: "auto"}}>
 					<Form
 						onChange={(v) => {
 							setNewItem(v.values);
@@ -534,6 +522,12 @@ export default function Dashboard() {
 							rules={[{ required: true, message: "这是必填项～" }]}
 						/>
 					</Form>
+
+					<div style={{ display: "flex", justifyContent: "flex-end" }}>
+						<Button theme="solid" onClick={handleEdit}>
+							修改
+						</Button>
+					</div>
 				</div>
 			</SideSheet>
 		</div>
