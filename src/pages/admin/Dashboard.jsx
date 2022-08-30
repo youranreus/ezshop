@@ -112,6 +112,22 @@ export default function Dashboard() {
 			width: 100,
 		},
 		{
+			title: "添加时间",
+			dataIndex: "created_at",
+			render: (text) => {
+				return <span>{(new Date(text)).toLocaleDateString()}</span>;
+			},
+			width: 100,
+		},
+		{
+			title: "修改时间",
+			dataIndex: "updated_at",
+			render: (text) => {
+				return <span>{(new Date(text)).toLocaleDateString()}</span>;
+			},
+			width: 100,
+		},
+		{
 			title: "数量操作",
 			dataIndex: "numOperate",
 			render: (text, record, index) => {
