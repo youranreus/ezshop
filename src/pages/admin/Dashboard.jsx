@@ -461,6 +461,7 @@ export default function Dashboard() {
 							field={"labels"}
 							label={"标签"}
 							rules={[{ required: true, message: "这是必填项～" }]}
+							addOnBlur={true}
 						/>
 						<Form.TextArea
 							field={"description"}
@@ -531,6 +532,7 @@ export default function Dashboard() {
 							field={"labels"}
 							label={"标签"}
 							rules={[{ required: true, message: "这是必填项～" }]}
+							addOnBlur={true}
 						/>
 						<Form.TextArea
 							field={"description"}
