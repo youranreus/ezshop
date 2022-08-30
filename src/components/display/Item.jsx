@@ -49,7 +49,9 @@ export default function Item(props) {
 								aspectRatio: "1/1",
 							}}
 						>
-							<div className="cover" style={{backgroundImage: `url(${itemData.path_img})`}}></div>
+							<div className="cover" style={{backgroundImage: `url(${itemData.path_img})`}}>
+								<span>还剩 {itemData.num} 件</span>
+							</div>
 						</Skeleton>
 					}
 					bodyStyle={{ padding: "8px" }}
@@ -62,7 +64,7 @@ export default function Item(props) {
 							</Col>
 							<Col span={12} style={{ textAlign: "right" }}>
 								<span className={"price"}>
-									{itemData.ori_price === 0 ? "暂无价格" : "￥ " + itemData.ori_price}
+									{itemData.ori_price === 0 ? "（0.0）" : "￥ " + itemData.ori_price}
 								</span>
 							</Col>
 						</Row>
@@ -83,7 +85,9 @@ export default function Item(props) {
 						placeholder={<Skeleton.Image />}
 						active={true}
 					>
-						<img alt={itemData.title} src={itemData.path_img} />
+						<div className="cover" style={{backgroundImage: `url(${itemData.path_img})`}}>
+								<span>还剩 {itemData.num} 件</span>
+							</div>
 					</Skeleton>
 					<h4>{itemData.title}</h4>
 
@@ -94,7 +98,7 @@ export default function Item(props) {
 							</Col>
 							<Col span={12} style={{ textAlign: "right" }}>
 								<span className={"price"}>
-									{itemData.ori_price === 0 ? "/" : "￥ " + itemData.ori_price}
+									{itemData.ori_price === 0 ? "卖多少好呢～" : "￥ " + itemData.ori_price}
 								</span>
 							</Col>
 						</Row>

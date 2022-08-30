@@ -47,6 +47,18 @@
 						-o-background-size: cover;
 						background-position: center center;
 						position: relative;
+
+						span {
+							position: absolute;
+							bottom: 3px;
+							right: 3px;
+							padding: 2px 10px;
+							background: rgba(255, 255, 255, 0.7);
+							border-radius: 100000rem;
+							transition: opacity 0.3s ease-in-out;
+							font-size: 0.625rem;
+							border: 1px solid var(--semi-color-border);
+						}
 					}
 
 					&:nth-of-type(2n) {
@@ -103,9 +115,30 @@ body {
 		overflow-y: auto;
 		overflow-x: hidden;
 
-		img {
-			width: 100%;
+		.cover {
+			aspect-ratio: 1/1;
+			background-repeat: no-repeat;
+			background-size: cover;
+			-webkit-background-size: cover;
+			-o-background-size: cover;
+			background-position: center center;
+			position: relative;
 			border-radius: 5px;
+			box-shadow: var(--semi-shadow-elevated);
+			width: 90%;
+			margin: 0 auto;
+
+			span {
+				position: absolute;
+				bottom: 3px;
+				right: 3px;
+				padding: 2px 10px;
+				background: rgba(255, 255, 255, 0.7);
+				border-radius: 100000rem;
+				transition: opacity 0.3s ease-in-out;
+				font-size: 0.625rem;
+				border: 1px solid var(--semi-color-border);
+			}
 		}
 
 		h4 {
