@@ -9,6 +9,7 @@ import {Spin, Toast, Button} from "@douyinfe/semi-ui";
 import {IconLoading} from '@douyinfe/semi-icons';
 import ItemList from "../../components/display/ItemList";
 
+// eslint-disable-next-line no-empty-pattern
 const Index = forwardRef(({ }, ref) => {
     useImperativeHandle(ref, () => ({
         setData: setFilterObj
@@ -50,6 +51,7 @@ const Index = forwardRef(({ }, ref) => {
         }).catch(err => {
             Toast.error(err.message);
         })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filterObj]);
 
     /**

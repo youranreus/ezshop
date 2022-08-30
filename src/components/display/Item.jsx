@@ -32,6 +32,7 @@ export default function Item(props) {
 		}).then((success) => {
 			setLoading(false);
 		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
@@ -49,7 +50,10 @@ export default function Item(props) {
 								aspectRatio: "1/1",
 							}}
 						>
-							<div className="cover" style={{backgroundImage: `url(${itemData.path_img})`}}>
+							<div
+								className="cover"
+								style={{ backgroundImage: `url(${itemData.path_img})` }}
+							>
 								<span>还剩 {itemData.num} 件</span>
 							</div>
 						</Skeleton>
@@ -64,7 +68,9 @@ export default function Item(props) {
 							</Col>
 							<Col span={12} style={{ textAlign: "right" }}>
 								<span className={"price"}>
-									{itemData.ori_price === 0 ? "（0.0）" : "￥ " + itemData.ori_price}
+									{itemData.ori_price === 0
+										? "（0.0）"
+										: "￥ " + itemData.ori_price}
 								</span>
 							</Col>
 						</Row>
@@ -84,10 +90,17 @@ export default function Item(props) {
 						loading={loading}
 						placeholder={<Skeleton.Image />}
 						active={true}
+						style={{
+							width: "90%",
+							height: "200px",
+						}}
 					>
-						<div className="cover" style={{backgroundImage: `url(${itemData.path_img})`}}>
-								<span>还剩 {itemData.num} 件</span>
-							</div>
+						<div
+							className="cover"
+							style={{ backgroundImage: `url(${itemData.path_img})` }}
+						>
+							<span>还剩 {itemData.num} 件</span>
+						</div>
 					</Skeleton>
 					<h4>{itemData.title}</h4>
 
@@ -98,7 +111,9 @@ export default function Item(props) {
 							</Col>
 							<Col span={12} style={{ textAlign: "right" }}>
 								<span className={"price"}>
-									{itemData.ori_price === 0 ? "卖多少好呢～" : "￥ " + itemData.ori_price}
+									{itemData.ori_price === 0
+										? "卖多少好呢～"
+										: "￥ " + itemData.ori_price}
 								</span>
 							</Col>
 						</Row>
