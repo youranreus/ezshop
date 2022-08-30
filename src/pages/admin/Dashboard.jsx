@@ -183,7 +183,7 @@ export default function Dashboard() {
 	 * @returns {string|boolean}
 	 */
 	const paramCheck = () => {
-		const keys = ["title", "description", "kind", "path_img", "labels", "num"];
+		const keys = ["title", "kind", "path_img", "labels", "num"];
 		if (!keys.every((key) => Object.hasOwn(newItem, key) && newItem[key]))
 			return "不能留空噢";
 		return false;
@@ -281,6 +281,7 @@ export default function Dashboard() {
 			obj[key] = newItem[key];
 		});
 		obj.labels = "#" + obj.labels.join("#") + "#";
+		if (!obj.description) obj.description = ''
 
 		EditFormApi.current
 			.validate()
@@ -467,7 +468,6 @@ export default function Dashboard() {
 						<Form.TextArea
 							field={"description"}
 							label={"描述"}
-							rules={[{ required: true, message: "这是必填项～" }]}
 						/>
 					</Form>
 
@@ -539,7 +539,6 @@ export default function Dashboard() {
 						<Form.TextArea
 							field={"description"}
 							label={"描述"}
-							rules={[{ required: true, message: "这是必填项～" }]}
 						/>
 					</Form>
 
