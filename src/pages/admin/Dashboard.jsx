@@ -2,7 +2,7 @@
  * @author 季悠然
  * @date 2022-08-09
  */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
 	IconPlus,
@@ -37,6 +37,9 @@ export default function Dashboard() {
 	const [itemList, updateItemList] = useState([]);
 	const [selectedList, setSelectedList] = useState([]);
 	const [keyword, setKeyword] = useState("");
+
+	const AddFormApi = useRef();
+	const EditFormApi = useRef();
 
 	/**
 	 * 表格列定义
@@ -165,7 +168,8 @@ export default function Dashboard() {
 	 */
 	const paramCheck = () => {
 		const keys = ["title", "description", "kind", "path_img", "labels", "num"];
-		if (!keys.every((key) => Object.hasOwn(newItem, key))) return "不能留空噢";
+		if (!keys.every((key) => Object.hasOwn(newItem, key) && newItem[key]))
+			return "不能留空噢";
 		return false;
 	};
 
@@ -175,19 +179,23 @@ export default function Dashboard() {
 	const handleSubmit = () => {
 		if (!paramCheck()) {
 			newItem.labels = "#" + newItem.labels.join("#") + "#";
-			AddGift(newItem).then((res) => {
-				if (res.data.code === 200) {
-					updateItemList([res.data.data].concat(itemList));
-					Toast.success(`${newItem.title} 添加成功`);
-				} else {
-					Toast.error(res.data.msg);
-				}
-			});
+			AddFormApi.current
+				.validate()
+				.then((res) => {
+					AddGift(newItem).then((res) => {
+						if (res.data.code === 200) {
+							updateItemList([res.data.data].concat(itemList));
+							Toast.success(`${newItem.title} 添加成功`);
+						} else {
+							Toast.error(res.data.msg);
+						}
+					});
+				})
+				.catch(() => {
+					Toast.warning("请检查表单必填项");
+				});
 		} else {
-			Toast.error({
-				content: paramCheck(),
-				duration: 2,
-			});
+			Toast.error(paramCheck());
 		}
 	};
 
@@ -258,17 +266,24 @@ export default function Dashboard() {
 		});
 		obj.labels = "#" + obj.labels.join("#") + "#";
 
-		UpdateGift(obj).then((res) => {
-			if (res.data.code === 200) {
-				const arr = [].concat(itemList);
-				arr.forEach((e) => {
-					if (e.id === obj.id) keys.forEach((key) => (e[key] = obj[key]));
-				});
+		EditFormApi.current
+			.validate()
+			.then(() => {
+				UpdateGift(obj).then((res) => {
+					if (res.data.code === 200) {
+						const arr = [].concat(itemList);
+						arr.forEach((e) => {
+							if (e.id === obj.id) keys.forEach((key) => (e[key] = obj[key]));
+						});
 
-				updateItemList(arr);
-				Toast.success(`${obj.title} 修改成功`);
-			} else Toast.success(res.data.msg);
-		});
+						updateItemList(arr);
+						Toast.success(`${obj.title} 修改成功`);
+					} else Toast.error(res.data.msg);
+				});
+			})
+			.catch(() => {
+				Toast.warning("请检查表单必填项");
+			});
 	};
 
 	/**
@@ -278,7 +293,7 @@ export default function Dashboard() {
 		getCheckboxProps: (record) => ({
 			name: record.title,
 		}),
-		onSelect: (record, selected) => {
+		onSelect: (record) => {
 			setSelectedList([record].concat(selectedList));
 		},
 		onSelectAll: (selected, selectedRows) => {
@@ -407,6 +422,7 @@ export default function Dashboard() {
 						onChange={(v) => {
 							setNewItem(v.values);
 						}}
+						getFormApi={(formApi) => (AddFormApi.current = formApi)}
 					>
 						<Form.Input
 							field={"title"}
@@ -418,7 +434,7 @@ export default function Dashboard() {
 								<Form.InputNumber
 									field={"ori_price"}
 									label={"价格"}
-									min={0}
+									min={-1}
 									style={{ width: "90%" }}
 								/>
 							</Col>
@@ -432,10 +448,26 @@ export default function Dashboard() {
 								/>
 							</Col>
 						</Row>
-						<Form.Input field={"kind"} label={"分类"} rules={[{ required: true, message: "这是必填项～" }]}/>
-						<Form.Input field={"path_img"} label={"图片url"} rules={[{ required: true, message: "这是必填项～" }]}/>
-						<Form.TagInput field={"labels"} label={"标签"} rules={[{ required: true, message: "这是必填项～" }]}/>
-						<Form.TextArea field={"description"} label={"描述"} rules={[{ required: true, message: "这是必填项～" }]}/>
+						<Form.Input
+							field={"kind"}
+							label={"分类"}
+							rules={[{ required: true, message: "这是必填项～" }]}
+						/>
+						<Form.Input
+							field={"path_img"}
+							label={"图片url"}
+							rules={[{ required: true, message: "这是必填项～" }]}
+						/>
+						<Form.TagInput
+							field={"labels"}
+							label={"标签"}
+							rules={[{ required: true, message: "这是必填项～" }]}
+						/>
+						<Form.TextArea
+							field={"description"}
+							label={"描述"}
+							rules={[{ required: true, message: "这是必填项～" }]}
+						/>
 					</Form>
 				</div>
 			</SideSheet>
@@ -455,25 +487,52 @@ export default function Dashboard() {
 							setNewItem(v.values);
 						}}
 						initValues={newItem}
+						getFormApi={(formApi) => (EditFormApi.current = formApi)}
 					>
-						<Form.Input field={"title"} label={"标题"} />
+						<Form.Input
+							field={"title"}
+							label={"标题"}
+							rules={[{ required: true, message: "这是必填项～" }]}
+						/>
 						<Row>
 							<Col span={12}>
 								<Form.InputNumber
 									field={"ori_price"}
 									label={"价格"}
-									min={0}
+									min={-1}
 									style={{ width: "90%" }}
+									rules={[{ required: true, message: "这是必填项～" }]}
 								/>
 							</Col>
 							<Col span={12}>
-								<Form.InputNumber field={"num"} label={"数量"} min={0} />
+								<Form.InputNumber
+									field={"num"}
+									label={"数量"}
+									min={0}
+									rules={[{ required: true, message: "这是必填项～" }]}
+								/>
 							</Col>
 						</Row>
-						<Form.Input field={"kind"} label={"分类"} />
-						<Form.Input field={"path_img"} label={"图片url"} />
-						<Form.TagInput field={"labels"} label={"标签"} />
-						<Form.TextArea field={"description"} label={"描述"} />
+						<Form.Input
+							field={"kind"}
+							label={"分类"}
+							rules={[{ required: true, message: "这是必填项～" }]}
+						/>
+						<Form.Input
+							field={"path_img"}
+							label={"图片url"}
+							rules={[{ required: true, message: "这是必填项～" }]}
+						/>
+						<Form.TagInput
+							field={"labels"}
+							label={"标签"}
+							rules={[{ required: true, message: "这是必填项～" }]}
+						/>
+						<Form.TextArea
+							field={"description"}
+							label={"描述"}
+							rules={[{ required: true, message: "这是必填项～" }]}
+						/>
 					</Form>
 				</div>
 			</SideSheet>
