@@ -11,6 +11,7 @@ import {
 	Space,
 	Tag,
 	Divider,
+	Toast,
 } from "@douyinfe/semi-ui";
 import { useEffect, useState } from "react";
 
@@ -43,7 +44,9 @@ export default function Item(props) {
 		const img = new Image();
 		img.onload = () => {
 			console.log(img.width, img.height);
-			if (aspectRatio === "1/1") {
+			if (img.width === img.height)
+				Toast.info("无法再放大了哦～");
+			else if (aspectRatio === "1/1") {
 				setRatio(`${img.width}/${img.height}`);
 			} else {
 				setRatio("1/1");
