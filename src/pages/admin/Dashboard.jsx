@@ -4,7 +4,12 @@
  */
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IconPlus, IconDelete, IconEdit, IconSearch } from "@douyinfe/semi-icons";
+import {
+	IconPlus,
+	IconDelete,
+	IconEdit,
+	IconSearch,
+} from "@douyinfe/semi-icons";
 import {
 	TagGroup,
 	Toast,
@@ -320,7 +325,7 @@ export default function Dashboard() {
 		QueryThingList({
 			filter: {
 				title: ["like", keyword],
-			}
+			},
 		}).then((res) => {
 			if (res.data.code !== 200) {
 				Toast.info(res.data.msg);
@@ -328,7 +333,7 @@ export default function Dashboard() {
 				updateItemList(res.data.data);
 			}
 		});
-	}
+	};
 
 	const AddFooter = (
 		<div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -366,7 +371,13 @@ export default function Dashboard() {
 					</ButtonGroup>
 				</Space>
 				<div className="search">
-					<Input placeholder={"搜索物品"} prefix={<IconSearch />} value={keyword} onChange={v => setKeyword(v)} onEnterPress={handleSearch}></Input>
+					<Input
+						placeholder={"搜索物品"}
+						prefix={<IconSearch />}
+						value={keyword}
+						onChange={(v) => setKeyword(v)}
+						onEnterPress={handleSearch}
+					></Input>
 				</div>
 			</div>
 
@@ -397,7 +408,11 @@ export default function Dashboard() {
 							setNewItem(v.values);
 						}}
 					>
-						<Form.Input field={"title"} label={"标题"} />
+						<Form.Input
+							field={"title"}
+							label={"标题"}
+							rules={[{ required: true, message: "这是必填项～" }]}
+						/>
 						<Row>
 							<Col span={12}>
 								<Form.InputNumber
@@ -408,13 +423,19 @@ export default function Dashboard() {
 								/>
 							</Col>
 							<Col span={12}>
-								<Form.InputNumber field={"num"} label={"数量"} min={0} />
+								<Form.InputNumber
+									required
+									field={"num"}
+									label={"数量"}
+									min={0}
+									rules={[{ required: true, message: "这是必填项～" }]}
+								/>
 							</Col>
 						</Row>
-						<Form.Input field={"kind"} label={"分类"} />
-						<Form.Input field={"path_img"} label={"图片url"} />
-						<Form.TagInput field={"labels"} label={"标签"} />
-						<Form.TextArea field={"description"} label={"描述"} />
+						<Form.Input field={"kind"} label={"分类"} rules={[{ required: true, message: "这是必填项～" }]}/>
+						<Form.Input field={"path_img"} label={"图片url"} rules={[{ required: true, message: "这是必填项～" }]}/>
+						<Form.TagInput field={"labels"} label={"标签"} rules={[{ required: true, message: "这是必填项～" }]}/>
+						<Form.TextArea field={"description"} label={"描述"} rules={[{ required: true, message: "这是必填项～" }]}/>
 					</Form>
 				</div>
 			</SideSheet>
