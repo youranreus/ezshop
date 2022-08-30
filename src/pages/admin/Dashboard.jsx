@@ -458,6 +458,7 @@ export default function Dashboard() {
 							rules={[{ required: true, message: "这是必填项～" }]}
 						/>
 						<Form.TagInput
+							separator=','
 							field={"labels"}
 							label={"标签"}
 							rules={[{ required: true, message: "这是必填项～" }]}
@@ -529,6 +530,7 @@ export default function Dashboard() {
 							rules={[{ required: true, message: "这是必填项～" }]}
 						/>
 						<Form.TagInput
+							separator=','
 							field={"labels"}
 							label={"标签"}
 							rules={[{ required: true, message: "这是必填项～" }]}
