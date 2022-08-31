@@ -44,8 +44,7 @@ export default function Item(props) {
 		const img = new Image();
 		img.onload = () => {
 			console.log(img.width, img.height);
-			if (img.width === img.height)
-				Toast.info("无法再放大了哦～");
+			if (img.width === img.height) Toast.info("无法再放大了哦～");
 			else if (aspectRatio === "1/1") {
 				setRatio(`${img.width}/${img.height}`);
 			} else {
@@ -115,10 +114,8 @@ export default function Item(props) {
 							height: "200px",
 						}}
 					>
-						<div
-							className="cover"
-							style={{ backgroundImage: `url(${itemData.path_img})`, aspectRatio: aspectRatio }}
-						>
+						<div className="cover" style={{ aspectRatio: aspectRatio }}>
+							<img src={itemData.path_img} alt={itemData.title} />
 							<span className="zoom" onClick={zoom}>
 								查看大图
 							</span>

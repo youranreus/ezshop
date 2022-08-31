@@ -116,17 +116,18 @@ body {
 		overflow-x: hidden;
 
 		.cover {
-			background-repeat: no-repeat;
-			background-size: cover;
-			-webkit-background-size: cover;
-			-o-background-size: cover;
-			background-position: center center;
 			position: relative;
 			border-radius: 5px;
 			box-shadow: var(--semi-shadow-elevated);
 			width: 90%;
 			margin: .5rem auto;
+			overflow: hidden;
 			transition: all 0.3s ease-in-out;
+			img {
+				width: 100%;
+				height: auto;
+				transition: all 0.3s ease-in-out;
+			}
 
 			.num {
 				position: absolute;
