@@ -19,7 +19,7 @@ export default function Item(props) {
 	const { itemData } = props;
 	const [loading, setLoading] = useState(true);
 	const [showDetail, setShowDetail] = useState(false);
-	const [aspectRatio, setRatio] = useState("1/1");
+	const [height, setHeight] = useState("300px");
 
 	/**
 	 * 图片懒加载
@@ -45,10 +45,10 @@ export default function Item(props) {
 		img.onload = () => {
 			console.log(img.width, img.height);
 			if (img.width === img.height) Toast.info("无法再放大了哦～");
-			else if (aspectRatio === "1/1") {
-				setRatio(`${img.width}/${img.height}`);
+			else if (height === "300px") {
+				setHeight(img.height / img.width * 300 + "px");
 			} else {
-				setRatio("1/1");
+				setHeight("300px");
 			}
 		};
 		img.src = itemData.path_img;
@@ -110,12 +110,11 @@ export default function Item(props) {
 						placeholder={<Skeleton.Image />}
 						active={true}
 						style={{
-							width: "90%",
-							height: "200px",
+							width: "300px",
+							height: "300px",
 						}}
 					>
-						<div className="cover" style={{ aspectRatio: aspectRatio }}>
-							<img src={itemData.path_img} alt={itemData.title} />
+						<div className="cover" style={{ backgroundImage: `url(${itemData.path_img})`, height: height }}>
 							<span className="zoom" onClick={zoom}>
 								查看大图
 							</span>

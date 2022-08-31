@@ -40,7 +40,7 @@
 					margin: 0.25rem 0.5rem;
 
 					.cover {
-						aspect-ratio: 1/1;
+						height: 200px;
 						background-repeat: no-repeat;
 						background-size: cover;
 						-webkit-background-size: cover;
@@ -119,15 +119,16 @@ body {
 			position: relative;
 			border-radius: 5px;
 			box-shadow: var(--semi-shadow-elevated);
-			width: 90%;
-			margin: .5rem auto;
+			width: 300px;
+			margin: 0.5rem auto;
 			overflow: hidden;
 			transition: all 0.3s ease-in-out;
-			img {
-				width: 100%;
-				height: auto;
-				transition: all 0.3s ease-in-out;
-			}
+			background-repeat: no-repeat;
+			background-size: cover;
+			-webkit-background-size: cover;
+			-o-background-size: cover;
+			background-position: center center;
+			position: relative;
 
 			.num {
 				position: absolute;
