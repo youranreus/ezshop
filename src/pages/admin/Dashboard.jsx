@@ -296,6 +296,7 @@ export default function Dashboard() {
 						});
 
 						updateItemList(arr);
+						setEditPanel(false);
 						Toast.success(`${obj.title} 修改成功`);
 					} else Toast.error(res.data.msg);
 				});
