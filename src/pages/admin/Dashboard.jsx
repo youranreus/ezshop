@@ -241,7 +241,7 @@ export default function Dashboard() {
 	const handleUpdateNum = (record, index, num = 1) => {
 		if (record.num + num < 0) Toast.error("数量不能小于0");
 		else {
-			UpdateGift({ id: record.id, num: record.num + num }).then((res) => {
+			UpdateGift({ id: record.id, num: record.num + num, is_active: record.is_active }).then((res) => {
 				if (res.data.code === 200) {
 					const arr = [].concat(itemList);
 					arr[index].num = record.num + num;
