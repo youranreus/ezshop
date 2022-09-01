@@ -184,7 +184,7 @@ export default function Dashboard() {
 	 */
 	const paramCheck = () => {
 		const keys = ["title", "kind", "path_img", "labels", "num"];
-		if (!keys.every((key) => Object.hasOwn(newItem, key) && newItem[key]))
+		if (!keys.every((key) => Object.hasOwn(newItem, key)))
 			return "不能留空噢";
 		return false;
 	};
