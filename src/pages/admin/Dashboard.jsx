@@ -201,6 +201,8 @@ export default function Dashboard() {
 					AddGift(newItem).then((res) => {
 						if (res.data.code === 200) {
 							updateItemList([res.data.data].concat(itemList));
+							AddFormApi.current.reset();
+							setAddPanel(false);
 							Toast.success(`${newItem.title} 添加成功`);
 						} else {
 							Toast.error(res.data.msg);
@@ -411,7 +413,6 @@ export default function Dashboard() {
 			<SideSheet
 				title={"添加礼品"}
 				width={375}
-				keepDOM={true}
 				visible={addPanel}
 				onCancel={() => {
 					setAddPanel(false);
