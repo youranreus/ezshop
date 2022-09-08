@@ -7,39 +7,20 @@ import { Layout } from "@douyinfe/semi-ui";
 import TopBar from "../components/Header";
 import "../style/display.scss";
 import Index from "./display/Index";
-import { useRef } from "react";
+import { useDispatch } from "react-redux";
+import { search, cancelSearch } from "../slice/querySlice";
 
 export default function Display() {
 	const { Header, Content, Footer } = Layout;
-	const list = useRef();
+	const dispatch = useDispatch();
 
 	/**
 	 * 搜索回调
 	 * @param value
 	 */
 	const handleSearch = (value) => {
-		if (value !== "") {
-			list.current.setData({
-				filter: {
-					ori_price: [">=", "0"],
-					is_active: ["==", "1"],
-					title: ["like", value],
-				},
-				order: {},
-				page: 1,
-				per_page: 10,
-			});
-		} else {
-			list.current.setData({
-				filter: {
-					ori_price: [">=", "0"],
-					is_active: ["==", "1"],
-				},
-				order: {},
-				page: 1,
-				per_page: 10,
-			});
-		}
+		if (value !== "") dispatch(search(value));
+		else dispatch(cancelSearch());
 	};
 
 	return (
@@ -48,7 +29,7 @@ export default function Display() {
 				<TopBar searchCallback={handleSearch} />
 			</Header>
 			<Content className={"content"}>
-				<Index ref={list} />
+				<Index/>
 			</Content>
 			<Footer>
 				<div className={"footer"}>

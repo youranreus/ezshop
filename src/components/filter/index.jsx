@@ -14,6 +14,8 @@ import {
 	Banner,
 	Form,
 } from "@douyinfe/semi-ui";
+import { useDispatch } from "react-redux";
+import { setObj, reset } from "../../slice/querySlice";
 
 export default function Filter(props) {
 	/**
@@ -24,6 +26,7 @@ export default function Filter(props) {
 		priceh: ["ori_price", "desc"],
 		pricel: ["ori_price", "asc"],
 	};
+	const dispatch = useDispatch();
 
 	/**
 	 * 高级筛选弹窗控制
@@ -49,11 +52,6 @@ export default function Filter(props) {
 	const formApi = useRef();
 
 	/**
-	 * 回调函数，用于更新筛选表单值
-	 */
-	const { callback } = props;
-
-	/**
 	 * 开关弹窗
 	 */
 	const toggle = () => {
@@ -65,7 +63,8 @@ export default function Filter(props) {
 	 * @param formValue
 	 */
 	const update = (formValue) => {
-		const newValue = { ...filterObj };
+		const newValue = JSON.parse(JSON.stringify(filterObj));
+
 		if (formValue.filter && formValue.filter.kind)
 			newValue.filter.kind = ["like", formValue.filter.kind];
 		else delete newValue.filter.kind;
@@ -82,7 +81,8 @@ export default function Filter(props) {
 	const submit = () => {
 		const newValue = { ...filterObj };
 		if (Object.keys(newValue.filter).length === 0) delete newValue.filter;
-		callback(filterObj);
+		updateFilterObj(newValue);
+		dispatch(setObj(newValue));
 		toggle();
 	};
 
@@ -95,13 +95,13 @@ export default function Filter(props) {
 		if (order === "default") newValue.order = {};
 		else newValue.order = { [orderMap[order][0]]: orderMap[order][1] };
 		updateFilterObj(newValue);
-		callback(newValue);
+		dispatch(setObj(newValue));
 	};
 
 	/**
 	 * 重置筛选表单
 	 */
-	const reset = () => {
+	const resetObj = () => {
 		updateFilterObj({
 			filter: {
 				ori_price: [">=", "0"],
@@ -111,15 +111,7 @@ export default function Filter(props) {
 			page: 1,
 			per_page: 10,
 		});
-		callback({
-			filter: {
-				ori_price: [">=", "0"],
-				is_active: ["==", "1"],
-			},
-			order: {},
-			page: 1,
-			per_page: 10,
-		});
+		dispatch(reset());
 		formApi.current.reset();
 		toggle();
 	};
@@ -135,7 +127,7 @@ export default function Filter(props) {
 					<Button theme="borderless" onClick={toggle}>
 						取消
 					</Button>
-					<Button theme="borderless" onClick={reset}>
+					<Button theme="borderless" onClick={resetObj}>
 						重置
 					</Button>
 					<Button theme="solid" onClick={submit}>

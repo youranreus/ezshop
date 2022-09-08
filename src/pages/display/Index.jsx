@@ -3,89 +3,85 @@
  * @date 2022-08-05
  */
 import Filter from "../../components/filter";
-import {useEffect, useState, forwardRef, useImperativeHandle} from "react";
-import {QueryThingList} from "../../api/gift";
-import {Spin, Toast, Button} from "@douyinfe/semi-ui";
-import {IconLoading} from '@douyinfe/semi-icons';
+import { useEffect, useState } from "react";
+import { QueryThingList } from "../../api/gift";
+import { Spin, Toast, Button } from "@douyinfe/semi-ui";
+import { IconLoading } from "@douyinfe/semi-icons";
 import ItemList from "../../components/display/ItemList";
+import { useSelector, useDispatch } from "react-redux";
+import { pageUp } from "../../slice/querySlice";
 
-// eslint-disable-next-line no-empty-pattern
-const Index = forwardRef(({ }, ref) => {
-    useImperativeHandle(ref, () => ({
-        setData: setFilterObj
-    }))
+const Index = () => {
+	const [itemList, updateItemList] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [hasMore, setMore] = useState(true);
+	const queryObj = useSelector((state) => state.query);
+	const dispatch = useDispatch();
 
-    const [filterObj, setFilterObj] = useState({
-        filter: {
-            ori_price: [">=", "0"],
-            is_active: ["==", "1"]
-        },
-        order: {},
-        page: 1,
-        per_page: 10
-    });
-    const [itemList, updateItemList] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [hasMore, setMore] = useState(true);
+	/**
+	 * 获取礼物列表
+	 */
+	useEffect(() => {
+        console.log(queryObj);
+		const len = itemList.length;
+		if (len === 0) setLoading(true);
+		QueryThingList(queryObj)
+			.then((res) => {
+                console.log(res.data);
+				if (res.data.code === 200) {
+					if (queryObj.page !== 1) {
+						updateItemList(itemList.concat(res.data.data));
+						if (res.data.returned + len >= res.data.total)
+							setMore(false);
+						else setMore(true);
+					} else {
+						updateItemList(res.data.data);
+						if (res.data.returned === res.data.total)
+							setMore(false);
+						else setMore(true);
+					}
 
-    /**
-     * 获取礼物列表
-     */
-    useEffect(() => {
-        const len = itemList.length;
-        if (len === 0) setLoading(true);
-        QueryThingList(filterObj).then(res => {
-            if (res.data.code === 200) {
-                if (filterObj.page !== 1) {
-                    updateItemList(itemList.concat(res.data.data));
-                    if (res.data.returned + len >= res.data.total) setMore(false);
-                    else setMore(true);
-                } else {
-                    updateItemList(res.data.data);
-                    if (res.data.returned === res.data.total) setMore(false);
-                    else setMore(true);
-                }
+					setLoading(false);
+				} else throw new Error(res.data.msg);
+			})
+			.catch((err) => {
+				Toast.error(err.message);
+			});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [queryObj]);
 
-                setLoading(false);
-            } else throw new Error(res.data.msg);
-        }).catch(err => {
-            Toast.error(err.message);
-        })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [filterObj]);
+	/**
+	 * 加载更多
+	 */
+	const loadMore = () => {
+		dispatch(pageUp());
+	};
 
-    /**
-     * 更新筛选表单值
-     * @param obj
-     */
-    const getFilterObject = (obj) => {
-        setFilterObj(obj);
-    }
+	return (
+		<div className="index">
+			<Filter />
+			<div className="content">
+				{loading && (
+					<div className="loading">
+						<Spin indicator={<IconLoading />} size={"large"} />
+					</div>
+				)}
+				{!loading && <ItemList listData={itemList} />}
 
-    /**
-     * 加载更多
-     */
-    const loadMore = () => {
-        const obj = {...filterObj}
-        obj.page = obj.page + 1;
-        setFilterObj(obj);
-    }
-
-    return (
-        <div className="index">
-            <Filter callback={getFilterObject}/>
-            <div className="content">
-                {loading && <div className="loading">
-                    <Spin indicator={<IconLoading/>} size={"large"}/>
-                </div>}
-                {!loading && <ItemList listData={itemList}/>}
-
-                {hasMore && <div className="loadMore">
-                    <Button theme={"borderless"} block={true} onClick={loadMore}>加载更多</Button>
-                </div>}
-            </div>
-        </div>
-    );
-})
+				{hasMore && (
+					<div className="loadMore">
+						<Button
+							theme={"borderless"}
+							block={true}
+							onClick={loadMore}
+						>
+							加载更多
+						</Button>
+					</div>
+				)}
+			</div>
+		</div>
+	);
+};
 
 export default Index;
