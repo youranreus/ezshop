@@ -22,12 +22,10 @@ const Index = () => {
 	 * 获取礼物列表
 	 */
 	useEffect(() => {
-        console.log(queryObj);
 		const len = itemList.length;
 		if (len === 0) setLoading(true);
 		QueryThingList(queryObj)
 			.then((res) => {
-                console.log(res.data);
 				if (res.data.code === 200) {
 					if (queryObj.page !== 1) {
 						updateItemList(itemList.concat(res.data.data));

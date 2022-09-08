@@ -43,13 +43,10 @@ export default function Item(props) {
 	const zoom = () => {
 		const img = new Image();
 		img.onload = () => {
-			console.log(img.width, img.height);
 			if (img.width === img.height) Toast.info("无法再放大了哦～");
-			else if (height === "300px") {
-				setHeight(img.height / img.width * 300 + "px");
-			} else {
-				setHeight("300px");
-			}
+			else if (height === "300px")
+				setHeight((img.height / img.width) * 300 + "px");
+			else setHeight("300px");
 		};
 		img.src = itemData.path_img;
 	};
@@ -71,7 +68,9 @@ export default function Item(props) {
 						>
 							<div
 								className="cover"
-								style={{ backgroundImage: `url(${itemData.path_img})` }}
+								style={{
+									backgroundImage: `url(${itemData.path_img})`,
+								}}
 							>
 								<span>还剩 {itemData.num} 件</span>
 							</div>
@@ -83,7 +82,9 @@ export default function Item(props) {
 					<div className="meta">
 						<Row>
 							<Col span={12}>
-								<span className={"kind"}># {itemData.kind}</span>
+								<span className={"kind"}>
+									# {itemData.kind}
+								</span>
 							</Col>
 							<Col span={12} style={{ textAlign: "right" }}>
 								<span className={"price"}>
@@ -104,7 +105,10 @@ export default function Item(props) {
 				placement={"bottom"}
 				onCancel={() => setShowDetail(false)}
 			>
-				<div className="detail" style={{ maxWidth: "580px", margin: "0 auto" }}>
+				<div
+					className="detail"
+					style={{ maxWidth: "580px", margin: "0 auto" }}
+				>
 					<Skeleton
 						loading={loading}
 						placeholder={<Skeleton.Image />}
@@ -114,7 +118,13 @@ export default function Item(props) {
 							height: "300px",
 						}}
 					>
-						<div className="cover" style={{ backgroundImage: `url(${itemData.path_img})`, height: height }}>
+						<div
+							className="cover"
+							style={{
+								backgroundImage: `url(${itemData.path_img})`,
+								height: height,
+							}}
+						>
 							<span className="zoom" onClick={zoom}>
 								查看大图
 							</span>
@@ -126,7 +136,9 @@ export default function Item(props) {
 					<div className="meta">
 						<Row>
 							<Col span={12}>
-								<span className={"kind"}># {itemData.kind}</span>
+								<span className={"kind"}>
+									# {itemData.kind}
+								</span>
 							</Col>
 							<Col span={12} style={{ textAlign: "right" }}>
 								<span className={"price"}>
@@ -145,7 +157,11 @@ export default function Item(props) {
 										.split("#")
 										.map((tag, index) => {
 											return (
-												<Tag key={index} color={"green"} type={"light"}>
+												<Tag
+													key={index}
+													color={"green"}
+													type={"light"}
+												>
 													{tag}
 												</Tag>
 											);
