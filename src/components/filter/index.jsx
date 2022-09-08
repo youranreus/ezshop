@@ -80,8 +80,12 @@ export default function Filter(props) {
 	 */
 	const submit = () => {
 		const newValue = { ...filterObj };
+		if (newValue.filter.labels)
+			newValue.filter.labels[1] = "#" + newValue.filter.labels[1].join("#") + "#";
 		if (Object.keys(newValue.filter).length === 0) delete newValue.filter;
+		
 		updateFilterObj(newValue);
+		
 		dispatch(setObj(newValue));
 		toggle();
 	};
@@ -149,8 +153,12 @@ export default function Filter(props) {
 						onChange={updateOrder}
 					>
 						<Select.Option value="default">默认排序</Select.Option>
-						<Select.Option value="priceh">价格从高到低</Select.Option>
-						<Select.Option value="pricel">价格从低到高</Select.Option>
+						<Select.Option value="priceh">
+							价格从高到低
+						</Select.Option>
+						<Select.Option value="pricel">
+							价格从低到高
+						</Select.Option>
 					</Select>
 				</Col>
 				<Col span={6} className={"right"}>
@@ -172,7 +180,12 @@ export default function Filter(props) {
 						getFormApi={(a) => (formApi.current = a)}
 					>
 						<Form.Input label={"分类"} field={"filter.kind"} />
-						<Form.TagInput label={"标签"} field={"filter.labels"} />
+						<Form.TagInput
+							separator=","
+							addOnBlur={true}
+							label={"标签"}
+							field={"filter.labels"}
+						/>
 					</Form>
 					<br />
 					<br />
