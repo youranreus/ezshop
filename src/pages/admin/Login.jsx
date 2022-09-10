@@ -6,25 +6,40 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, Input, Button, Toast } from "@douyinfe/semi-ui";
 import { login } from "../../api/admin";
+import { useDispatch } from "react-redux";
+import { login as userLogin } from "../../slice/userSlice";
 
 export default function Login() {
 	const [password, setPwd] = useState("");
 	const [username, setUsername] = useState("");
 	const [loading, setLoading] = useState(false);
 	const navi = useNavigate();
+	const dispatch = useDispatch();
 
+	/**
+	 * 提交登陆
+	 */
 	const submit = () => {
 		if (password === "" || username === "") {
 			Toast.warning("用户名或密码不能为空");
 		} else {
 			setLoading(true);
 			login(username, password).then((res) => {
-				console.log(res);
 				if (res.data.code === 200) {
 					Toast.success("登陆成功");
 					localStorage.setItem("access_token", res.data.access_token);
-					localStorage.setItem("refresh_token", res.data.refresh_token);
+					localStorage.setItem(
+						"refresh_token",
+						res.data.refresh_token
+					);
 					localStorage.setItem("user_id", username);
+					dispatch(
+						userLogin({
+							access_token: res.data.access_token,
+							refresh_token: res.data.refresh_token,
+							user_id: username,
+						})
+					);
 					setLoading(false);
 					navi("/admin");
 				} else {
@@ -40,7 +55,12 @@ export default function Login() {
 
 	return (
 		<div className={"login-wrapper"}>
-			<Card style={{ Width: "90vw" }} bordered headerLine={true} title="登录">
+			<Card
+				style={{ Width: "90vw" }}
+				bordered
+				headerLine={true}
+				title="登录"
+			>
 				<div className={"login-box"}>
 					<h4>用户名</h4>
 					<Input

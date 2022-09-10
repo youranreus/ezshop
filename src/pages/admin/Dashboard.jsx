@@ -27,6 +27,7 @@ import {
 } from "@douyinfe/semi-ui";
 import { AddGift, DelGift, QueryThingList, UpdateGift } from "../../api/admin";
 import NumEditor from "../../components/admin/NumEditor";
+import { useSelector } from "react-redux";
 
 export default function Dashboard() {
 	const navi = useNavigate();
@@ -37,6 +38,7 @@ export default function Dashboard() {
 	const [itemList, updateItemList] = useState([]);
 	const [selectedList, setSelectedList] = useState([]);
 	const [keyword, setKeyword] = useState("");
+	const user = useSelector((state) => state.user);
 
 	const AddFormApi = useRef();
 	const EditFormApi = useRef();
@@ -96,8 +98,7 @@ export default function Dashboard() {
 			dataIndex: "labels",
 			render: (text) => {
 				const arr = [];
-				text
-					.slice(1, -1)
+				text.slice(1, -1)
 					.split("#")
 					.forEach((e) => {
 						arr.push({ children: e });
@@ -115,7 +116,7 @@ export default function Dashboard() {
 			title: "添加时间",
 			dataIndex: "created_at",
 			render: (text) => {
-				return <span>{(new Date(text)).toLocaleDateString()}</span>;
+				return <span>{new Date(text).toLocaleDateString()}</span>;
 			},
 			width: 100,
 		},
@@ -123,7 +124,7 @@ export default function Dashboard() {
 			title: "修改时间",
 			dataIndex: "updated_at",
 			render: (text) => {
-				return <span>{(new Date(text)).toLocaleDateString()}</span>;
+				return <span>{new Date(text).toLocaleDateString()}</span>;
 			},
 			width: 100,
 		},
@@ -132,7 +133,11 @@ export default function Dashboard() {
 			dataIndex: "numOperate",
 			render: (text, record, index) => {
 				return (
-					<NumEditor record={record} index={index} handler={handleUpdateNum} />
+					<NumEditor
+						record={record}
+						index={index}
+						handler={handleUpdateNum}
+					/>
 				);
 			},
 			width: 100,
@@ -160,13 +165,20 @@ export default function Dashboard() {
 	];
 
 	/**
-	 * 判断登录态并获取礼品列表
+	 * 判断登录态
 	 */
 	useEffect(() => {
-		if (!localStorage.getItem("access_token")) {
+		if ((user.local || user.manual) && !user.status) {
 			Toast.info("请先登录");
 			navi("/admin/login");
-		} else {
+		}
+	}, [user, navi]);
+
+	/**
+	 * 获取礼品列表
+	 */
+	useEffect(() => {
+		if (user.status)
 			QueryThingList().then((res) => {
 				if (res.data.code !== 200) {
 					Toast.info(res.data.msg);
@@ -174,9 +186,7 @@ export default function Dashboard() {
 					updateItemList(res.data.data);
 				}
 			});
-		}
-		// eslint-disable-next-line
-	}, []);
+	}, [user]);
 
 	/**
 	 * 参数判断
@@ -241,7 +251,11 @@ export default function Dashboard() {
 	const handleUpdateNum = (record, index, num = 1) => {
 		if (record.num + num < 0) Toast.error("数量不能小于0");
 		else {
-			UpdateGift({ id: record.id, num: record.num + num, is_active: record.is_active }).then((res) => {
+			UpdateGift({
+				id: record.id,
+				num: record.num + num,
+				is_active: record.is_active,
+			}).then((res) => {
 				if (res.data.code === 200) {
 					const arr = [].concat(itemList);
 					arr[index].num = record.num + num;
@@ -283,7 +297,7 @@ export default function Dashboard() {
 			obj[key] = newItem[key];
 		});
 		obj.labels = "#" + obj.labels.join("#") + "#";
-		if (!obj.description) obj.description = ''
+		if (!obj.description) obj.description = "";
 
 		EditFormApi.current
 			.validate()
@@ -292,7 +306,8 @@ export default function Dashboard() {
 					if (res.data.code === 200) {
 						const arr = [].concat(itemList);
 						arr.forEach((e) => {
-							if (e.id === obj.id) keys.forEach((key) => (e[key] = obj[key]));
+							if (e.id === obj.id)
+								keys.forEach((key) => (e[key] = obj[key]));
 						});
 
 						updateItemList(arr);
@@ -343,7 +358,8 @@ export default function Dashboard() {
 
 				const list = [].concat(itemList);
 				selectedList.forEach((e) => {
-					list[list.findIndex((item) => item.id === e.id)].is_active = status;
+					list[list.findIndex((item) => item.id === e.id)].is_active =
+						status;
 				});
 				updateItemList(list);
 				Toast.success("操作成功");
@@ -385,8 +401,12 @@ export default function Dashboard() {
 						添加礼品
 					</Button>
 					<ButtonGroup type={"secondary"}>
-						<Button onClick={() => handleActive(true)}>批量上架礼品</Button>
-						<Button onClick={() => handleActive(false)}>批量下架礼品</Button>
+						<Button onClick={() => handleActive(true)}>
+							批量上架礼品
+						</Button>
+						<Button onClick={() => handleActive(false)}>
+							批量下架礼品
+						</Button>
 					</ButtonGroup>
 				</Space>
 				<div className="search">
@@ -419,7 +439,10 @@ export default function Dashboard() {
 					setAddPanel(false);
 				}}
 			>
-				<div className="add-panel"  style={{maxHeight: "85vh", overflow: "auto"}}>
+				<div
+					className="add-panel"
+					style={{ maxHeight: "85vh", overflow: "auto" }}
+				>
 					<Form
 						onChange={(v) => {
 							setNewItem(v.values);
@@ -429,7 +452,9 @@ export default function Dashboard() {
 						<Form.Input
 							field={"title"}
 							label={"标题"}
-							rules={[{ required: true, message: "这是必填项～" }]}
+							rules={[
+								{ required: true, message: "这是必填项～" },
+							]}
 						/>
 						<Row>
 							<Col span={12}>
@@ -446,34 +471,44 @@ export default function Dashboard() {
 									field={"num"}
 									label={"数量"}
 									min={0}
-									rules={[{ required: true, message: "这是必填项～" }]}
+									rules={[
+										{
+											required: true,
+											message: "这是必填项～",
+										},
+									]}
 								/>
 							</Col>
 						</Row>
 						<Form.Input
 							field={"kind"}
 							label={"分类"}
-							rules={[{ required: true, message: "这是必填项～" }]}
+							rules={[
+								{ required: true, message: "这是必填项～" },
+							]}
 						/>
 						<Form.Input
 							field={"path_img"}
 							label={"图片url"}
-							rules={[{ required: true, message: "这是必填项～" }]}
+							rules={[
+								{ required: true, message: "这是必填项～" },
+							]}
 						/>
 						<Form.TagInput
-							separator=','
+							separator=","
 							field={"labels"}
 							label={"标签"}
-							rules={[{ required: true, message: "这是必填项～" }]}
+							rules={[
+								{ required: true, message: "这是必填项～" },
+							]}
 							addOnBlur={true}
 						/>
-						<Form.TextArea
-							field={"description"}
-							label={"描述"}
-						/>
+						<Form.TextArea field={"description"} label={"描述"} />
 					</Form>
 
-					<div style={{ display: "flex", justifyContent: "flex-end" }}>
+					<div
+						style={{ display: "flex", justifyContent: "flex-end" }}
+					>
 						<Button theme="solid" onClick={handleSubmit}>
 							添加
 						</Button>
@@ -489,18 +524,25 @@ export default function Dashboard() {
 					setEditPanel(false);
 				}}
 			>
-				<div className="edit-panel" style={{maxHeight: "85vh", overflow: "auto"}}>
+				<div
+					className="edit-panel"
+					style={{ maxHeight: "85vh", overflow: "auto" }}
+				>
 					<Form
 						onChange={(v) => {
 							setNewItem(v.values);
 						}}
 						initValues={newItem}
-						getFormApi={(formApi) => (EditFormApi.current = formApi)}
+						getFormApi={(formApi) =>
+							(EditFormApi.current = formApi)
+						}
 					>
 						<Form.Input
 							field={"title"}
 							label={"标题"}
-							rules={[{ required: true, message: "这是必填项～" }]}
+							rules={[
+								{ required: true, message: "这是必填项～" },
+							]}
 						/>
 						<Row>
 							<Col span={12}>
@@ -509,7 +551,12 @@ export default function Dashboard() {
 									label={"价格"}
 									min={-1}
 									style={{ width: "90%" }}
-									rules={[{ required: true, message: "这是必填项～" }]}
+									rules={[
+										{
+											required: true,
+											message: "这是必填项～",
+										},
+									]}
 								/>
 							</Col>
 							<Col span={12}>
@@ -517,34 +564,44 @@ export default function Dashboard() {
 									field={"num"}
 									label={"数量"}
 									min={0}
-									rules={[{ required: true, message: "这是必填项～" }]}
+									rules={[
+										{
+											required: true,
+											message: "这是必填项～",
+										},
+									]}
 								/>
 							</Col>
 						</Row>
 						<Form.Input
 							field={"kind"}
 							label={"分类"}
-							rules={[{ required: true, message: "这是必填项～" }]}
+							rules={[
+								{ required: true, message: "这是必填项～" },
+							]}
 						/>
 						<Form.Input
 							field={"path_img"}
 							label={"图片url"}
-							rules={[{ required: true, message: "这是必填项～" }]}
+							rules={[
+								{ required: true, message: "这是必填项～" },
+							]}
 						/>
 						<Form.TagInput
-							separator=','
+							separator=","
 							field={"labels"}
 							label={"标签"}
-							rules={[{ required: true, message: "这是必填项～" }]}
+							rules={[
+								{ required: true, message: "这是必填项～" },
+							]}
 							addOnBlur={true}
 						/>
-						<Form.TextArea
-							field={"description"}
-							label={"描述"}
-						/>
+						<Form.TextArea field={"description"} label={"描述"} />
 					</Form>
 
-					<div style={{ display: "flex", justifyContent: "flex-end" }}>
+					<div
+						style={{ display: "flex", justifyContent: "flex-end" }}
+					>
 						<Button theme="solid" onClick={handleEdit}>
 							修改
 						</Button>
