@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, Input, Button, Toast } from "@douyinfe/semi-ui";
 import { ResetPassword } from "../../api/admin";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../slice/userSlice";
 
 export default function ResetPwd() {
 	const [currentPwd, setCurrentPwd] = useState("");
@@ -13,20 +15,18 @@ export default function ResetPwd() {
 	const [verify_password, setVPwd] = useState("");
 	const [loading, setLoading] = useState(false);
 	const navi = useNavigate();
+	const dispatch = useDispatch();
+	const user = useSelector((state) => state.user);
 
 	/**
 	 * 登录态检查
 	 */
 	useEffect(() => {
-		if (
-			!localStorage.getItem("access_token") ||
-			!localStorage.getItem("user_id")
-		) {
+		if (!user.status && (user.manual || user.local)) {
 			Toast.info("请先登录");
 			navi("/admin/login");
 		}
-		// eslint-disable-next-line
-	}, []);
+	}, [navi, user]);
 
 	/**
 	 * 提交
@@ -47,11 +47,14 @@ export default function ResetPwd() {
 					Toast.success("修改成功");
 					localStorage.removeItem("access_token");
 					localStorage.removeItem("refresh_token");
+					localStorage.removeItem("user_id");
+					dispatch(logout());
+					setLoading(false);
 					navi("/admin/login");
 				} else {
 					Toast.error(res.data.msg);
+					setLoading(false);
 				}
-				setLoading(false);
 			});
 		}
 	};
