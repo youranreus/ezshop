@@ -9,6 +9,9 @@ import { readLocal } from "./slice/userSlice";
 function App() {
 	const dispatch = useDispatch();
 
+	/**
+	 * 读取本地登录态
+	 */
 	useEffect(() => {
 		const keys = ["access_token", "refresh_token", "user_id"];
 		if (keys.every((key) => localStorage.getItem(key)))

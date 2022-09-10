@@ -16,6 +16,9 @@ export default function Login() {
 	const navi = useNavigate();
 	const dispatch = useDispatch();
 
+	/**
+	 * 提交登陆
+	 */
 	const submit = () => {
 		if (password === "" || username === "") {
 			Toast.warning("用户名或密码不能为空");
