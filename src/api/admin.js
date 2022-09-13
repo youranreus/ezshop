@@ -4,7 +4,7 @@
  */
 
 import API from "./index";
-import { APIWithAuth } from "./index";
+import { APIWithAuth, API2Refresh } from "./index";
 import { getQueryJson } from "../utils";
 
 export const login = (username, password) =>
@@ -21,3 +21,6 @@ export const DelGift = (id) =>
 export const UpdateGift = (data) => APIWithAuth.put("/thing", data);
 
 export const ResetPassword = (data) => APIWithAuth.put("/user", data);
+
+export const UpdateToken = (username) =>
+	API2Refresh.put("/token", { username });
