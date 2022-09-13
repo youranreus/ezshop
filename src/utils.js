@@ -10,5 +10,5 @@ export function getDate(date) {
 }
 
 export function getQueryJson(json) {
-	return encodeURI(Base64.encode(JSON.stringify(json)));
+	return Base64.encode(encodeURI(JSON.stringify(json)));
 }
