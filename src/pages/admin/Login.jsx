@@ -32,6 +32,7 @@ export default function Login() {
 						"refresh_token",
 						res.data.refresh_token
 					);
+					localStorage.setItem("user_last_login", Date.now());
 					localStorage.setItem("user_id", username);
 					dispatch(
 						userLogin({
