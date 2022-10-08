@@ -5,9 +5,10 @@
 import Filter from "../../components/filter";
 import { useEffect, useState } from "react";
 import { QueryThingList } from "../../api/gift";
-import { Spin, Toast, Button } from "@douyinfe/semi-ui";
+import { Spin, Toast, Button, Col, Row } from "@douyinfe/semi-ui";
 import { IconLoading } from "@douyinfe/semi-icons";
 import ItemList from "../../components/display/ItemList";
+import SideMenu from "../../components/display/SideMenu";
 import { useSelector, useDispatch } from "react-redux";
 import { pageUp } from "../../slice/querySlice";
 
@@ -58,26 +59,36 @@ const Index = () => {
 	return (
 		<div className="index">
 			<Filter />
-			<div className="content">
-				{loading && (
-					<div className="loading">
-						<Spin indicator={<IconLoading />} size={"large"} />
-					</div>
-				)}
-				{!loading && <ItemList listData={itemList} />}
+			<Row>
+				<Col span={4}>
+					<SideMenu />
+				</Col>
+				<Col span={20}>
+					<div className="content">
+						{loading && (
+							<div className="loading">
+								<Spin
+									indicator={<IconLoading />}
+									size={"large"}
+								/>
+							</div>
+						)}
+						{!loading && <ItemList listData={itemList} />}
 
-				{hasMore && (
-					<div className="loadMore">
-						<Button
-							theme={"borderless"}
-							block={true}
-							onClick={loadMore}
-						>
-							加载更多
-						</Button>
+						{hasMore && (
+							<div className="loadMore">
+								<Button
+									theme={"borderless"}
+									block={true}
+									onClick={loadMore}
+								>
+									加载更多
+								</Button>
+							</div>
+						)}
 					</div>
-				)}
-			</div>
+				</Col>
+			</Row>
 		</div>
 	);
 };
