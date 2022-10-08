@@ -60,10 +60,10 @@ const Index = () => {
 		<div className="index">
 			<Filter />
 			<Row>
-				<Col span={4}>
+				<Col span={6}>
 					<SideMenu />
 				</Col>
-				<Col span={20}>
+				<Col span={18}>
 					<div className="content">
 						{loading && (
 							<div className="loading">

@@ -1,10 +1,9 @@
-import { useSelector, useDispatch } from "react-redux";
-import { setObj } from "../../slice/querySlice";
+import { useDispatch } from "react-redux";
+import { setObj, reset } from "../../slice/querySlice";
 import { QueryThingList } from "../../api/gift";
 import { useEffect, useState } from "react";
 
 export default function SideMenu() {
-	const queryObj = useSelector((state) => state.query);
 	const dispatch = useDispatch();
 	const [kindList, setKindList] = useState([]);
 
@@ -52,17 +51,53 @@ export default function SideMenu() {
 				tmpKinds.push(element.kind);
 			});
 
-            tmpKinds = [...new Set(tmpKinds)];
-            setKindList(tmpKinds);
-            localStorage.setItem('kinds', JSON.stringify(tmpKinds))
-            localStorage.setItem('kinds_date', Date.now())
+			tmpKinds = [...new Set(tmpKinds)];
+			setKindList(tmpKinds);
+			localStorage.setItem("kinds", JSON.stringify(tmpKinds));
+			localStorage.setItem("kinds_date", Date.now());
 		});
+	};
+
+	/**
+	 * 选择分类
+	 * @param {string} kind 分类
+	 */
+	const handleClick = (kind) => {
+		if (!kind) dispatch(reset());
+		else {
+			dispatch(
+				setObj({
+					filter: {
+						ori_price: [">=", "0"],
+						is_active: ["==", "1"],
+						kind: ["==", kind],
+					},
+					order: {},
+					page: 1,
+					per_page: 10,
+				})
+			);
+		}
 	};
 
 	return (
 		<div className={"side-menu"}>
+			<div
+				className="menu-item"
+				onClick={() => {
+					handleClick();
+				}}
+			>
+				<p>全部</p>
+			</div>
 			{kindList.map((kind) => (
-				<div className="menu-item" key={kind}>
+				<div
+					className="menu-item"
+					key={kind}
+					onClick={() => {
+						handleClick(kind);
+					}}
+				>
 					<p>{kind}</p>
 				</div>
 			))}
