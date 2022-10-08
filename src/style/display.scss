@@ -107,6 +107,8 @@
 
 			.side-menu {
 				margin-right: -0.5rem;
+				overflow: auto;
+    			max-height: 90vh;
 
 				.menu-item {
 					text-align: center;
