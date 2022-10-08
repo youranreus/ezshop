@@ -14,7 +14,7 @@ import {
 	Banner,
 	Form,
 } from "@douyinfe/semi-ui";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setObj, reset } from "../../slice/querySlice";
 
 export default function Filter(props) {
@@ -27,6 +27,7 @@ export default function Filter(props) {
 		pricel: ["ori_price", "asc"],
 	};
 	const dispatch = useDispatch();
+	const queryObj = useSelector((state) => state.query);
 
 	/**
 	 * 高级筛选弹窗控制
@@ -95,7 +96,7 @@ export default function Filter(props) {
 	 * @param order
 	 */
 	const updateOrder = (order) => {
-		const newValue = { ...filterObj };
+		const newValue = { ...queryObj };
 		if (order === "default") newValue.order = {};
 		else newValue.order = { [orderMap[order][0]]: orderMap[order][1] };
 		updateFilterObj(newValue);
