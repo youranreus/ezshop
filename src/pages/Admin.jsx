@@ -37,7 +37,7 @@ export default function Admin() {
 								<Col span={12}>
 									<div className="title">
 										<Link to={"/admin"}>
-											礼品Go 后台管理
+											易支富礼品 后台管理
 										</Link>
 									</div>
 								</Col>

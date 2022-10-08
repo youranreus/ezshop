@@ -22,7 +22,7 @@ export default function TopBar(props) {
 		<div className={"top-bar"}>
 			<Row>
 				<Col span={12}>
-					<h3>礼品Go</h3>
+					<h3>易支富礼品</h3>
 				</Col>
 				<Col span={12}>
 					<div className="right">
