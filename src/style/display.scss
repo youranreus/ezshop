@@ -34,12 +34,14 @@
 			.content {
 				overflow: auto;
     			max-height: 90vh;
+				background-color: var(--semi-color-tertiary-light-default);
 			}
 
 			.item-list {
 				display: flex;
 				flex-wrap: wrap;
-				
+				background-color: white;
+				border-radius: 10px;
 
 				.item {
 					width: calc((100% - 1.5rem) / 2);
@@ -75,6 +77,10 @@
 						margin-right: 0.25rem;
 					}
 
+					&:nth-of-type(1), &:nth-of-type(2) {
+						margin-top: 0.5rem;
+					}
+
 					h4 {
 						font-size: 1rem;
 						overflow: hidden;
@@ -106,14 +112,14 @@
 			}
 
 			.side-menu {
-				margin-right: -0.5rem;
 				overflow: auto;
-    			max-height: 90vh;
+    			height: 90vh;
+				background-color: var(--semi-color-tertiary-light-default);
 
 				.menu-item {
 					text-align: center;
-					height: 32px;
-					line-height: 32px;
+					height: 48px;
+					line-height: 48px;
 
 					font-size: 14px;
 
@@ -123,11 +129,6 @@
 
 					&:hover {
 						cursor: pointer;
-						background-color: var(--semi-color-tertiary-light-default);
-					}
-
-					&:focus {
-						background-color: var(--semi-color-tertiary-light-default);
 					}
 				}
 			}
@@ -135,7 +136,10 @@
 	}
 
 	.footer {
-		margin: 3rem 0.5rem 0.5rem;
+		padding: 3rem 0.5rem 0.5rem;
+		background-color: var(--semi-color-tertiary-light-default);
+		top: -1px;
+		position: relative;
 
 		p {
 			text-align: right;

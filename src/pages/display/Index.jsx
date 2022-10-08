@@ -59,7 +59,7 @@ const Index = () => {
 	return (
 		<div className="index">
 			<Filter />
-			<Row>
+			<Row style={{top: "-1px"}}>
 				<Col span={6}>
 					<SideMenu />
 				</Col>
