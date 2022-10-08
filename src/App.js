@@ -4,7 +4,7 @@ import renderRoutes from "./router/router-config.js";
 import route from "./router";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { readLocal } from "./slice/userSlice";
+import { readLocal, logout } from "./slice/userSlice";
 import { UpdateToken } from "./api/admin";
 
 function App() {
@@ -52,7 +52,14 @@ function App() {
 							},
 						})
 					);
-				});
+				}).catch((error => {
+					console.log(error.message);
+					localStorage.removeItem("access_token");
+					localStorage.removeItem("refresh_token");
+					localStorage.removeItem("user_id");
+
+					dispatch(logout());
+				}))
 			} else {
 				dispatch(
 					readLocal({
